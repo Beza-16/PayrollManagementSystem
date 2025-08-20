@@ -1,0 +1,103 @@
+/* Container for the payroll generation page */
+.payroll-generation {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: black;
+}
+
+.payroll-generation.body-dark-mode {
+  color:white;
+}
+
+/* Cards container */
+.payroll-generation .cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px; /* Matched to CompanyManagement */
+  margin-bottom: 30px;
+}
+
+/* Card styles */
+.payroll-generation .card {
+  width: 200px; /* Matched to CompanyManagement */
+  background-color: #041c42;
+  color: white;
+  padding: 25px; /* Matched to CompanyManagement */
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+  transition: all 0.5s ease-in-out;
+}
+
+.payroll-generation.body-dark-mode .card {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+/* Card title */
+.payroll-generation .card h3 {
+  font-size: 16px; /* Retained non-bold */
+  font-weight: 400;
+  margin-bottom: 10px; /* Matched to CompanyManagement */
+}
+
+/* Card link */
+.payroll-generation .card a {
+  color: #76d9ff;
+  text-decoration: none;
+  font-size: 14px; /* Retained non-bold */
+  font-weight: 400;
+}
+
+.payroll-generation.body-dark-mode .card a {
+  color: #3498db;
+}
+
+.payroll-generation .card a:hover {
+  text-decoration: underline;
+}
+
+/* Card icons */
+.payroll-generation .card-icon {
+  font-size: 30px; /* Matched to CompanyManagement */
+  margin-bottom: 10px; /* Matched to CompanyManagement */
+  color: white;
+}
+
+.payroll-generation.body-dark-mode .card-icon {
+  color: #e4e7eb;
+}
+
+/* Specific icon colors */
+.payroll-generation .generate-icon {
+  color: #28a745; /* Green */
+}
+
+.payroll-generation.body-dark-mode .generate-icon {
+  color: #34c759;
+}
+
+.payroll-generation .reports-icon {
+  color: #ffc107; /* Yellow */
+}
+
+.payroll-generation.body-dark-mode .reports-icon {
+  color: #ffd700;
+}
+
+.payroll-generation .download-icon {
+  color: #17a2b8; /* Cyan */
+}
+
+.payroll-generation.body-dark-mode .download-icon {
+  color: #4dd0e1;
+}
+
+.payroll-generation .config-icon {
+  color: #6f42c1; /* Purple */
+}
+
+.payroll-generation.body-dark-mode .config-icon {
+  color: #9b59b6;
+}

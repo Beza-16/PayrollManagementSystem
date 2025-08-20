@@ -1,0 +1,312 @@
+/* Body defaults for light and dark modes */
+body {
+  background-color: #afc6d4; /* Light mode default */
+}
+
+body.dark-mode {
+  background-color: #09224a; /* Dark mode background */
+}
+
+/* Container styles */
+.company-page-container {
+  width: 100%; /* Stretch to full width of parent */
+  padding: 10px; /* Match BranchPage.css */
+  box-sizing: border-box;
+  color: #000000; /* Light mode text */
+}
+
+body.dark-mode .company-page-container {
+  background-color: #09224a; /* Dark mode */
+  color: #e4e7eb; /* Match BranchPage.css text color */
+}
+
+/* Header styles */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-section h2 {
+  font-size: 20px; /* Match BranchPage.css */
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .header-section h2 {
+  color: #e4e7eb; /* Match BranchPage.css */
+}
+
+/* Add button */
+.add-btn {
+  background-color: #3498db; /* Match BranchPage.css */
+  color: #fff;
+  padding: 8px 16px; /* Match BranchPage.css */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #2980b9; /* Match BranchPage.css */
+}
+
+/* Success message */
+.success-message {
+  background-color: #2ecc71; /* Green for success */
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .success-message {
+  background-color: #27ae60; /* Darker green for dark mode */
+  color: #e4e7eb;
+}
+
+/* Table section */
+.table-section {
+  margin-top: 20px; /* Match BranchPage.css */
+  background-color: #f4f4f4; /* Light mode */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+
+body.dark-mode .table-section {
+  background-color: #041c42; /* Match BranchPage.css */
+}
+
+/* Table wrapper */
+.table-wrapper {
+  width: 100%;
+  max-height: 300px; /* Match BranchPage.css */
+  overflow-y: auto; /* Match BranchPage.css */
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Search bar */
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px; /* Match BranchPage.css */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff; /* Light mode */
+  color: #000000;
+  font-size: 14px; /* Match BranchPage.css */
+}
+
+body.dark-mode .search-bar {
+  background-color: #0a2b5e; /* Match BranchPage.css */
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+/* Company table */
+.company-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+  color: #000000; /* Light mode */
+  font-size: 14px; /* Match BranchPage.css */
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97); /* Match BranchPage.css */
+}
+
+body.dark-mode .company-table {
+  background-color: #041c42; /* Match BranchPage.css */
+  color: #e4e7eb;
+}
+
+.company-table th,
+.company-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* Match BranchPage.css */
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .company-table th,
+body.dark-mode .company-table td {
+  color: #e4e7eb; /* Match BranchPage.css */
+}
+
+.company-table th {
+  background-color: #e9ecef; /* Light mode */
+  position: sticky; /* Match BranchPage.css */
+  top: 0;
+  z-index: 1;
+}
+
+body.dark-mode .company-table th {
+  background-color: #003087; /* Match BranchPage.css */
+}
+
+.company-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light mode */
+}
+
+body.dark-mode .company-table tr:nth-child(even) {
+  background-color: #0a2b5e; /* Match BranchPage.css */
+}
+
+/* Status badge */
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 12px; /* Match BranchPage.css */
+  font-size: 12px;
+}
+
+.status-badge.active {
+  background-color: #2ecc71; /* Match BranchPage.css */
+  color: #fff;
+}
+
+.status-badge.inactive {
+  background-color: #e74c3c; /* Match BranchPage.css */
+  color: #fff;
+}
+
+/* Table footer */
+.table-footer {
+  display: flex;
+  justify-content: space-between; /* Match BranchPage.css */
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.nav-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db; /* Blue background for enabled buttons */
+  color: #fff;
+  border: none;
+  border-radius: 50%; /* Circular shape */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+body.dark-mode .nav-btn {
+  background-color: #3498db; /* Ensure dark mode uses the same blue */
+  color: #fff;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #2980b9; /* Darker blue on hover */
+}
+
+body.dark-mode .nav-btn:hover:not(:disabled) {
+  background-color: #2980b9; /* Consistent hover effect in dark mode */
+}
+
+.nav-btn:disabled {
+  background-color: #bdc3c7; /* Gray for disabled buttons */
+  cursor: not-allowed;
+}
+
+body.dark-mode .nav-btn:disabled {
+  background-color: #7f8c8d; /* Slightly darker gray for dark mode */
+}
+
+.table-footer span {
+  font-size: 14px; /* Match BranchPage.css */
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .table-footer span {
+  color: #e4e7eb; /* Match BranchPage.css text color */
+}
+
+/* Action buttons */
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-btn {
+  color: #3498db; /* Match BranchPage.css */
+}
+
+.edit-btn:hover {
+  color: #2980b9; /* Match BranchPage.css */
+}
+
+.delete-btn {
+  color: #e74c3c; /* Match BranchPage.css */
+}
+
+.delete-btn:hover {
+  color: #c0392b; /* Match BranchPage.css */
+}
+
+body.dark-mode .action-btn {
+  color: #3498db;
+}
+
+body.dark-mode .edit-btn:hover,
+body.dark-mode .delete-btn:hover {
+  color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .company-page-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .company-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .company-page-container {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .company-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+
+  .table-section {
+    padding: 10px;
+  }
+}

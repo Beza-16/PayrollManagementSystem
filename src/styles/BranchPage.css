@@ -1,0 +1,329 @@
+/* Body defaults for light and dark modes */
+body {
+  background-color: #afc6d4; /* Light mode default */
+}
+
+body.dark-mode {
+  background-color: #09224a; /* Dark mode background */
+}
+
+/* Container styles */
+.branch-page-container {
+  width: 100%; /* Stretch to full width of parent */
+  padding: 10px; /* Match CompanyPage.css */
+  box-sizing: border-box;
+  color: #000000; /* Light mode text */
+}
+
+body.dark-mode .branch-page-container {
+  background-color: #09224a; /* Match CompanyPage.css */
+  color: #e4e7eb; /* Match CompanyPage.css text color */
+}
+
+/* Header styles */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-section h2 {
+  font-size: 20px; /* Match CompanyPage.css */
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .header-section h2 {
+  color: #e4e7eb; /* Match CompanyPage.css */
+}
+
+/* Add button */
+.add-btn {
+  background-color: #3498db; /* Match CompanyPage.css */
+  color: #fff;
+  padding: 8px 16px; /* Match CompanyPage.css */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #2980b9; /* Match CompanyPage.css */
+}
+
+/* Success message */
+.success-message {
+  background-color: #2ecc71; /* Green for success, match CompanyPage.css */
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .success-message {
+  background-color: #27ae60; /* Darker green for dark mode, match CompanyPage.css */
+  color: #e4e7eb;
+}
+
+/* Error and loading messages */
+.error-message {
+  background-color: #e74c3c; /* Red for error */
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .error-message {
+  background-color: #c0392b; /* Darker red for dark mode */
+  color: #e4e7eb;
+}
+
+.loading-message {
+  background-color: #bdc3c7; /* Gray for loading */
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .loading-message {
+  background-color: #7f8c8d; /* Darker gray for dark mode */
+  color: #e4e7eb;
+}
+
+/* Table section */
+.table-section {
+  margin-top: 20px; /* Match CompanyPage.css */
+  background-color: #f4f4f4; /* Light mode */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+
+body.dark-mode .table-section {
+  background-color: #041c42; /* Match CompanyPage.css */
+}
+
+/* Table wrapper */
+.table-wrapper {
+  width: 100%;
+  max-height: 300px; /* Match CompanyPage.css */
+  overflow-y: auto; /* Match CompanyPage.css */
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Search bar */
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px; /* Match CompanyPage.css */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff; /* Light mode */
+  color: #000000;
+  font-size: 14px; /* Match CompanyPage.css */
+  position: sticky; /* Ensure it stays visible */
+  top: 0;
+  z-index: 10; /* Above table content */
+}
+
+body.dark-mode .search-bar {
+  background-color: #0a2b5e; /* Match CompanyPage.css */
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+/* Branch table */
+.branch-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+  color: #000000; /* Light mode */
+  font-size: 14px; /* Match CompanyPage.css */
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97); /* Match CompanyPage.css */
+}
+
+body.dark-mode .branch-table {
+  background-color: #041c42; /* Match CompanyPage.css */
+  color: #e4e7eb;
+}
+
+.branch-table th,
+.branch-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* Match CompanyPage.css */
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .branch-table th,
+body.dark-mode .branch-table td {
+  color: #e4e7eb; /* Match CompanyPage.css */
+}
+
+.branch-table th {
+  background-color: #e9ecef; /* Light mode */
+  position: sticky; /* Match CompanyPage.css */
+  top: 0;
+  z-index: 5; /* Below search bar, above table body */
+}
+
+body.dark-mode .branch-table th {
+  background-color: #003087; /* Match CompanyPage.css */
+}
+
+.branch-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light mode */
+}
+
+body.dark-mode .branch-table tr:nth-child(even) {
+  background-color: #0a2b5e; /* Match CompanyPage.css */
+}
+
+/* Table footer */
+.table-footer {
+  display: flex;
+  justify-content: space-between; /* Match CompanyPage.css */
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.nav-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db; /* Blue background for enabled buttons */
+  color: #fff;
+  border: none;
+  border-radius: 50%; /* Circular shape */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+body.dark-mode .nav-btn {
+  background-color: #3498db; /* Ensure dark mode uses the same blue */
+  color: #fff;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #2980b9; /* Darker blue on hover */
+}
+
+body.dark-mode .nav-btn:hover:not(:disabled) {
+  background-color: #2980b9; /* Consistent hover effect in dark mode */
+}
+
+.nav-btn:disabled {
+  background-color: #bdc3c7; /* Gray for disabled buttons */
+  cursor: not-allowed;
+}
+
+body.dark-mode .nav-btn:disabled {
+  background-color: #7f8c8d; /* Slightly darker gray for dark mode */
+}
+
+.table-footer span {
+  font-size: 14px; /* Match CompanyPage.css */
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .table-footer span {
+  color: #e4e7eb; /* Match CompanyPage.css text color */
+}
+
+/* Action buttons */
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-btn {
+  color: #3498db; /* Match CompanyPage.css */
+}
+
+.edit-btn:hover {
+  color: #2980b9; /* Match CompanyPage.css */
+}
+
+.delete-btn {
+  color: #e74c3c; /* Match CompanyPage.css */
+}
+
+.delete-btn:hover {
+  color: #c0392b; /* Match CompanyPage.css */
+}
+
+body.dark-mode .action-btn {
+  color: #3498db;
+}
+
+body.dark-mode .edit-btn:hover,
+body.dark-mode .delete-btn:hover {
+  color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .branch-page-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .branch-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .branch-page-container {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .branch-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+
+  .table-section {
+    padding: 10px;
+  }
+}

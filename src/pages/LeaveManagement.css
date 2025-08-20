@@ -1,0 +1,88 @@
+/* LeaveManagement.css */
+.leave-management {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+body.dark-mode .leave-management {
+  color: rgb(241, 236, 236);
+}
+
+.leave-management .cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.leave-management .card {
+  width: 190px;
+  background-color: #041c42;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(106, 211, 232, 0.97);
+  transition: all 0.5s ease-in-out;
+}
+
+body.dark-mode .leave-management .card {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+.leave-management .card-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+body.dark-mode .leave-management .card-icon {
+  color: #e4e7eb;
+}
+
+.leave-management .leaves-icon {
+  color: #0077ff;
+}
+
+body.dark-mode .leave-management .leaves-icon {
+  color: #76d9ff;
+}
+
+.leave-management .leave-types-icon {
+  color: #28a745;
+}
+
+body.dark-mode .leave-management .leave-types-icon {
+  color: #34c759;
+}
+
+.leave-management .leave-approvals-icon {
+  color: #6f42c1;
+}
+
+body.dark-mode .leave-management .leave-approvals-icon {
+  color: #9b59b6;
+}
+
+.leave-management .leave-list-icon {
+  color: #f97316; /* Bright orange for visibility */
+}
+
+body.dark-mode .leave-management .leave-list-icon {
+  color: #fb923c; /* Lighter orange for dark mode */
+}
+
+.leave-management .card a {
+  color: #76d9ff;
+  text-decoration: none;
+}
+
+body.dark-mode .leave-management .card a {
+  color: #3498db;
+}
+
+.leave-management .card a:hover {
+  text-decoration: underline;
+}

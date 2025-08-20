@@ -1,0 +1,511 @@
+/* Body defaults for light and dark modes */
+body {
+  background-color: #afc6d4;
+}
+
+body.dark-mode {
+  background-color: #09224a;
+}
+
+/* Container styles */
+.employee-page-container {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #000000;
+}
+
+body.dark-mode .employee-page-container {
+  background-color: #09224a;
+  color: #e4e7eb;
+}
+
+/* Header styles */
+.employee-page-container .header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.employee-page-container .header-section h2 {
+  font-size: 20px;
+  color: #000000;
+}
+
+body.dark-mode .employee-page-container .header-section h2 {
+  color: #e4e7eb;
+}
+
+/* Add button */
+.employee-page-container .add-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.employee-page-container .add-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Messages */
+.employee-page-container .success-message {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .employee-page-container .success-message {
+  background-color: #27ae60;
+}
+
+.employee-page-container .error-message {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .employee-page-container .error-message {
+  background-color: #c0392b;
+}
+
+.employee-page-container .loading-message {
+  background-color: #bdc3c7;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .employee-page-container .loading-message {
+  background-color: #7f8c8d;
+}
+
+/* Table section */
+.employee-page-container .table-section {
+  margin-top: 20px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .employee-page-container .table-section {
+  background-color: #041c42;
+}
+
+/* Table wrapper */
+.employee-page-container .table-wrapper {
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* Search bar */
+.employee-page-container .search-bar {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #000000;
+  font-size: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+body.dark-mode .employee-page-container .search-bar {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+/* Employee table */
+.employee-page-container .employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+  color: #000000;
+  font-size: 14px;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+}
+
+body.dark-mode .employee-page-container .employee-table {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+.employee-page-container .employee-table th,
+.employee-page-container .employee-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+body.dark-mode .employee-page-container .employee-table th,
+body.dark-mode .employee-page-container .employee-table td {
+  color: #e4e7eb;
+}
+
+.employee-page-container .employee-table th:first-child,
+.employee-page-container .employee-table td:first-child {
+  min-width: 200px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.employee-page-container .employee-table th {
+  background-color: #e9ecef;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+body.dark-mode .employee-page-container .employee-table th {
+  background-color: #003087;
+}
+
+.employee-page-container .employee-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+body.dark-mode .employee-page-container .employee-table tr:nth-child(even) {
+  background-color: #0a2b5e;
+}
+
+/* Details row */
+.employee-page-container .details-row td {
+  background-color: #e9ecef;
+  padding: 15px;
+}
+
+body.dark-mode .employee-page-container .details-row td {
+  background-color: #0a2b5e;
+}
+
+.employee-page-container .details-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.employee-page-container .details-content p {
+  margin: 0;
+  font-size: 14px;
+  flex: 1 1 45%;
+}
+
+.employee-page-container .details-content p strong {
+  color: #3498db;
+}
+
+body.dark-mode .employee-page-container .details-content p strong {
+  color: #66b2ff;
+}
+
+/* Table footer */
+.employee-page-container .table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.employee-page-container .nav-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode .employee-page-container .nav-btn {
+  background-color: #3498db;
+}
+
+.employee-page-container .nav-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.employee-page-container .nav-btn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+body.dark-mode .employee-page-container .nav-btn:disabled {
+  background-color: #7f8c8d;
+}
+
+.employee-page-container .table-footer span {
+  font-size: 14px;
+  color: #000000;
+}
+
+body.dark-mode .employee-page-container .table-footer span {
+  color: #e4e7eb;
+}
+
+/* Action buttons */
+.employee-page-container .actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.employee-page-container .action-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.employee-page-container .view-btn {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.employee-page-container .view-btn:hover {
+  background-color: #27ae60;
+}
+
+.employee-page-container .edit-btn {
+  color: #3498db;
+}
+
+.employee-page-container .edit-btn:hover {
+  color: #2980b9;
+}
+
+.employee-page-container .delete-btn {
+  color: #e74c3c;
+}
+
+.employee-page-container .delete-btn:hover {
+  color: #c0392b;
+}
+
+.employee-page-container .details-btn {
+  color: #2ecc71;
+}
+
+.employee-page-container .details-btn:hover {
+  color: #27ae60;
+}
+
+body.dark-mode .employee-page-container .action-btn {
+  color: #3498db;
+}
+
+body.dark-mode .employee-page-container .view-btn:hover {
+  background-color: #27ae60;
+}
+
+body.dark-mode .employee-page-container .edit-btn:hover {
+  color: #2980b9;
+}
+
+body.dark-mode .employee-page-container .delete-btn:hover {
+  color: #c0392b;
+}
+
+body.dark-mode .employee-page-container .details-btn {
+  color: #2ecc71;
+}
+
+body.dark-mode .employee-page-container .details-btn:hover {
+  color: #27ae60;
+}
+
+/* PDF-style modal (enhanced to match first image layout) */
+.pdf-style {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 720px;           /* Match the desired desktop width */
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+}
+
+body.dark-mode .pdf-style {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+/* Container for employee profile layout */
+.pdf-style .employee-profile {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Left column (photo + company/branch/department below) */
+.pdf-style .left-col {
+  width: 220px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Photo (bigger to match screenshot) */
+.pdf-style .employee-photo {
+  width: 180px;
+  height: 180px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f0f0f0;
+  display: block;
+}
+
+/* Placeholder box if no photo */
+.pdf-style .employee-photo.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+  border: 1px dashed #ccc;
+}
+
+/* Company/branch/department below the photo */
+.pdf-style .company-branch-dept {
+  text-align: center;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.pdf-style .company-branch-dept p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* Right column (top: details, bottom: contact) */
+.pdf-style .right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 260px;
+  text-align: left;
+}
+
+/* Right-top block with main details */
+.pdf-style .right-top p {
+  margin: 6px 0;
+  font-size: 15px;
+}
+
+/* Right-bottom contact area */
+.pdf-style .right-bottom p {
+  margin: 4px 0;
+  font-size: 15px;
+}
+
+/* Actions centered at bottom */
+.pdf-style .modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* Slightly larger buttons for clarity */
+.pdf-style .download-pdf-btn,
+.pdf-style .close-btn {
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+/* Responsive design */
+@media (max-width: 880px) {
+  .pdf-style {
+    width: 95%;
+  }
+  .pdf-style .employee-profile {
+    flex-direction: column;
+    align-items: center;
+  }
+  .pdf-style .left-col {
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .pdf-style .company-branch-dept {
+    text-align: left;
+  }
+  .pdf-style .right-col {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .employee-page-container {
+    padding: 10px;
+  }
+
+  .employee-page-container .employee-table th:first-child,
+  .employee-page-container .employee-table td:first-child {
+    min-width: 150px;
+  }
+
+  .employee-page-container .details-content p {
+    flex: 1 1 100%;
+  }
+
+  .pdf-style {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-page-container {
+    padding: 5px;
+  }
+
+  .employee-page-container .employee-table th:first-child,
+  .employee-page-container .employee-table td:first-child {
+    min-width: 120px;
+  }
+
+  .employee-page-container .table-section {
+    padding: 10px;
+  }
+
+  .pdf-style {
+    width: 95%;
+  }
+}

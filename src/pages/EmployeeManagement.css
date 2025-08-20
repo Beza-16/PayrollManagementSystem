@@ -1,0 +1,101 @@
+.employee-management {
+  padding: 20px;
+}
+
+body.dark-mode .employee-management {
+  color: rgb(241, 236, 236);
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.card {
+  width: auto;
+  background-color: #041c42;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+  transition: all 0.5s ease-in-out;
+}
+
+body.dark-mode .card {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+.card-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.profile-icon {
+  color: #0077ff; /* Blue for Employee Profile */
+}
+
+body.dark-mode .profile-icon {
+  color: #76d9ff; /* Lighter blue for dark mode */
+}
+
+.registration-icon {
+  color: #28a745; /* Green for Registration Details */
+}
+
+body.dark-mode .registration-icon {
+  color: #34c759; /* Lighter green for dark mode */
+}
+
+.work-icon {
+  color: #ff9800; /* Orange for Work Arrangement */
+}
+
+body.dark-mode .work-icon {
+  color: #ffb74d; /* Lighter orange for dark mode */
+}
+
+.qualifications-icon {
+  color: #6f42c1; /* Purple for Qualifications */
+}
+
+body.dark-mode .qualifications-icon {
+  color: #9b59b6; /* Lighter purple for dark mode */
+}
+
+.documents-icon {
+  color: #dc3545; /* Red for Documents & Attachments */
+}
+
+body.dark-mode .documents-icon {
+  color: #f14668; /* Lighter red for dark mode */
+}
+
+.card a {
+  color: #76d9ff;
+  text-decoration: none;
+}
+
+body.dark-mode .card a {
+  color: #3498db;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

@@ -1,0 +1,107 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  color: #dc3545;
+}
+
+.error-container button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.error-container button:hover {
+  background-color: #0056b3;
+}
+
+.main-container {
+  display: flex;
+  margin-top: 80px;
+  flex: 1;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s;
+  margin-left: 250px;
+  background-color: #f4f4f4;
+  min-height: calc(100vh - 80px);
+  flex-grow: 1;
+  color: #333;
+  position: relative;
+}
+
+body.dark-mode .main-content {
+  background-color: #09224a;
+  color: #ecf0f1;
+}
+
+@media (max-width: 767px) {
+  .main-content {
+    margin-left: 0;
+  }
+  .Sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  .Sidebar.isVisible {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Add suggestion dropdown styling */
+.suggestions {
+  list-style: none;
+  padding: 0;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  background: white;
+  width: 300px;
+  z-index: 1000;
+}
+
+.suggestions li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background-color: #f0f0f0;
+}

@@ -1,0 +1,96 @@
+/* Main container styles */
+.role-management {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+body.dark-mode .role-management {
+  color: rgb(241, 236, 236);
+}
+
+/* Scoped cards container */
+.role-management .cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Slightly reduced gap for better spacing */
+  margin-bottom: 30px;
+}
+
+/* Scoped card styles */
+.role-management .card {
+  width: 200px;
+  background-color: #041c6b; /* Slightly lighter shade for distinction */
+  color: white;
+  padding: 25px;
+  border-radius: 12px; /* Slightly larger radius for modern look */
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(28, 94, 181, 0.8); /* Softer shadow */
+  transition: all 0.3s ease-in-out; /* Smoother transition */
+}
+
+body.dark-mode .role-management .card {
+  background-color: #041c6b;
+  color: #e4e7eb;
+}
+
+/* Hover effect for cards */
+.role-management .card:hover {
+  transform: translateY(-5px); /* Subtle lift effect */
+  box-shadow: 0 8px 25px rgba(28, 94, 181, 1);
+}
+
+/* Scoped card icon */
+.role-management .card-icon {
+  font-size: 30px;
+  margin-bottom: 12px; /* Slightly more spacing */
+  color: white;
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .role-management .card-icon {
+  color: #e4e7eb;
+}
+
+/* Specific icon colors */
+.role-icon {
+  color: #17a2b8;
+}
+
+body.dark-mode .role-icon {
+  color: #4dd0e1;
+}
+
+.assignment-icon {
+  color: #6f42c1;
+}
+
+body.dark-mode .assignment-icon {
+  color: #9b59b6;
+}
+
+/* Scoped card links */
+.role-management .card a {
+  color: #76d9ff;
+  text-decoration: none;
+  font-weight: 500; /* Slightly bolder for readability */
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .role-management .card a {
+  color: #3498db;
+}
+
+.role-management .card a:hover {
+  color: #a3e4ff; /* Lighter hover color for contrast */
+  text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .role-management .card {
+    width: 100%; /* Full width on smaller screens */
+    max-width: 300px; /* Limit max width */
+    margin: 0 auto; /* Center cards */
+  }
+}

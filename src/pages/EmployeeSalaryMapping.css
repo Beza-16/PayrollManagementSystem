@@ -1,0 +1,95 @@
+/* Container for the employee-salary mapping page */
+.employee-salary-mapping {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: white;
+}
+
+.employee-salary-mapping.body-dark-mode {
+  color: rgb(241, 236, 236);
+}
+
+/* Cards container */
+.employee-salary-mapping .cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px; /* Matched to CompanyManagement */
+  margin-bottom: 30px;
+}
+
+/* Card styles */
+.employee-salary-mapping .card {
+  width: 200px; /* Matched to CompanyManagement */
+  background-color: #041c42;
+  color: white;
+  padding: 25px; /* Matched to CompanyManagement */
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+  transition: all 0.5s ease-in-out;
+}
+
+.employee-salary-mapping.body-dark-mode .card {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+/* Card title */
+.employee-salary-mapping .card h3 {
+  font-size: 16px; /* Retained non-bold */
+  font-weight: 400;
+  margin-bottom: 10px; /* Matched to CompanyManagement */
+}
+
+/* Card link */
+.employee-salary-mapping .card a {
+  color: #76d9ff;
+  text-decoration: none;
+  font-size: 14px; /* Retained non-bold */
+  font-weight: 400;
+}
+
+.employee-salary-mapping.body-dark-mode .card a {
+  color: #3498db;
+}
+
+.employee-salary-mapping .card a:hover {
+  text-decoration: underline;
+}
+
+/* Card icons */
+.employee-salary-mapping .card-icon {
+  font-size: 30px; /* Matched to CompanyManagement */
+  margin-bottom: 10px; /* Matched to CompanyManagement */
+  color: white;
+}
+
+.employee-salary-mapping.body-dark-mode .card-icon {
+  color: #e4e7eb;
+}
+
+/* Specific icon colors */
+.employee-salary-mapping .add-icon {
+  color: #28a745; /* Green */
+}
+
+.employee-salary-mapping.body-dark-mode .add-icon {
+  color: #34c759;
+}
+
+.employee-salary-mapping .view-icon {
+  color: #ffc107; /* Yellow */
+}
+
+.employee-salary-mapping.body-dark-mode .view-icon {
+  color: #ffd700;
+}
+
+.employee-salary-mapping .recent-icon {
+  color: #6f42c1; /* Purple */
+}
+
+.employee-salary-mapping.body-dark-mode .recent-icon {
+  color: #9b59b6;
+}

@@ -1,0 +1,198 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.form-group input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.form-group input[readonly] {
+  background-color: #f9f9f9;
+  color: #666;
+}
+
+.location-search-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.autocomplete-dropdown-container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 1000;
+  width: calc(100% - 2rem);
+}
+
+.suggestion-item {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.suggestion-item--active {
+  background-color: #f0f0f0;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.form-actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.form-actions button[type="button"] {
+  background-color: #ddd;
+  color: #333;
+}
+
+.form-actions button[type="button"]:hover {
+  background-color: #ccc;
+}
+
+.form-actions button[type="submit"] {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+  background-color: #357abd;
+}
+
+.form-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+/* Dark mode styles */
+body.dark-mode .modal-content {
+  background-color: #09224a;
+  color: #e4e7eb;
+}
+
+body.dark-mode .form-group label {
+  color: #e4e7eb;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .location-search-input {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+body.dark-mode .form-group input[readonly] {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+body.dark-mode .autocomplete-dropdown-container {
+  background-color: #0a2b5e;
+  border-color: #3498db;
+}
+
+body.dark-mode .suggestion-item {
+  color: #e4e7eb;
+}
+
+body.dark-mode .suggestion-item--active {
+  background-color: #1c3d7a;
+}
+
+body.dark-mode .form-actions button[type="button"] {
+  background-color: #7f8c8d;
+  color: #e4e7eb;
+}
+
+body.dark-mode .form-actions button[type="button"]:hover {
+  background-color: #6c757d;
+}
+
+body.dark-mode .form-actions button[type="submit"] {
+  background-color: #3498db;
+}
+
+body.dark-mode .form-actions button[type="submit"]:hover {
+  background-color: #2980b9;
+}
+
+body.dark-mode .error-message {
+  color: #ff6b6b;
+}
+
+body.dark-mode .success-message {
+  color: #51cf66;
+}

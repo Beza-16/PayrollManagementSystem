@@ -1,0 +1,155 @@
+/* Sidebar.css */
+
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #041c42;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 4px 0px 20px rgba(28, 94, 181, 0.97);
+  border-right: 5px solid rgba(28, 94, 181, 0.05);
+  z-index: 1000; /* Below top-nav (z-index: 1201) */
+  transition: transform 0.3s ease-in-out, visibility 0s;
+  overflow-y: auto;
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+  transform: translateX(-100%);
+  visibility: hidden;
+}
+
+.sidebar.visible {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+body.dark-mode .sidebar {
+  background-color: #02132f;
+  color: #ecf0f1;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.sidebar ul li {
+  margin: 12px 0;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 15.5px;
+  border-radius: 6px;
+  transition: background-color 0.25s, transform 0.2s;
+}
+
+.sidebar ul li a:hover {
+  background-color: #0d305e;
+  transform: translateX(4px);
+}
+
+.sidebar ul li a .icon {
+  margin-right: 12px;
+  font-size: 20px;
+  min-width: 20px;
+}
+
+.sidebar ul li a span {
+  flex: 1;
+  white-space: nowrap;
+}
+
+body.dark-mode .sidebar ul li a {
+  color: #ecf0f1;
+}
+
+/* Main content area shifts when sidebar is visible */
+.main-content {
+  margin-left: 250px;
+  transition: margin-left 0.3s;
+}
+
+.sidebar:not(.visible) ~ .main-content,
+.sidebar.hidden ~ .main-content {
+  margin-left: 0;
+}
+
+/* Responsive for tablets and below */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+  }
+  .main-content {
+    margin-left: 200px;
+  }
+}
+
+/* Responsive for small screens */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+    transform: translateX(-100%);
+  }
+  .sidebar.visible {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0;
+  }
+  .sidebar.visible ~ .main-content {
+    margin-left: 200px;
+  }
+}
+
+/* Responsive for mobile */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: calc(100vh - 60px);
+    transform: translateX(-100%);
+    border-right: none;
+    box-shadow: none;
+  }
+  .sidebar.visible {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0;
+  }
+  .sidebar.visible ~ .main-content {
+    margin-left: 0; /* Adjusted for mobile to avoid overlap */
+  }
+  .sidebar ul li a {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+  .sidebar ul li a .icon {
+    font-size: 22px;
+  }
+}
+
+/* Custom style for Manage Leave Types button */
+.sidebar ul li a.bg-light-blue-200 {
+  background-color: #add8e6; /* Light blue */
+  color: #333;
+}
+
+.sidebar ul li a.bg-light-blue-200:hover {
+  background-color: #87ceeb; /* Slightly darker light blue on hover */
+  transform: translateX(4px);
+}

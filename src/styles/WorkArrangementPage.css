@@ -1,0 +1,339 @@
+/* Body defaults for light and dark modes */
+body {
+  background-color: #afc6d4; /* Light mode default */
+  margin: 0; /* Ensure no default margin hides content */
+}
+
+body.dark-mode {
+  background-color: #09224a; /* Dark mode background */
+}
+
+/* Container styles */
+.work-arrangement-page-container {
+  width: 100%;
+  max-width: 1200px; /* Added max-width for better layout */
+  margin: 20px auto; /* Centered with margin */
+  padding: 20px;
+  box-sizing: border-box;
+  color: #000000; /* Light mode text */
+  background-color: #ffffff; /* Added fallback background for visibility */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  min-height: 80vh; /* Ensure container takes up space */
+}
+
+body.dark-mode .work-arrangement-page-container {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+/* Header styles */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-section h2 {
+  font-size: 24px; /* Increased font size for visibility */
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .header-section h2 {
+  color: #e4e7eb;
+}
+
+/* Add button */
+.add-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 20px; /* Increased padding */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px; /* Increased font size */
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Success message */
+.success-message {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .success-message {
+  background-color: #27ae60;
+  color: #e4e7eb;
+}
+
+/* Error and loading messages */
+.error-message {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .error-message {
+  background-color: #c0392b;
+  color: #e4e7eb;
+}
+
+.loading-message {
+  background-color: #bdc3c7;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.dark-mode .loading-message {
+  background-color: #7f8c8d;
+  color: #e4e7eb;
+}
+
+/* Table section */
+.table-section {
+  margin-top: 20px;
+  background-color: #f4f4f4; /* Light mode */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .table-section {
+  background-color: #041c42;
+}
+
+/* Table wrapper */
+.table-wrapper {
+  width: 100%;
+  max-height: 400px; /* Increased max-height for better visibility */
+  overflow-y: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Search bar */
+.search-bar {
+  width: 100%;
+  padding: 10px; /* Increased padding */
+  margin-bottom: 15px; /* Increased margin */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff; /* Light mode */
+  color: #000000;
+  font-size: 16px; /* Increased font size */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+body.dark-mode .search-bar {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+/* Work arrangement table */
+.work-arrangement-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+  color: #000000; /* Light mode */
+  font-size: 14px;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+}
+
+body.dark-mode .work-arrangement-table {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+.work-arrangement-table th,
+.work-arrangement-table td {
+  padding: 12px; /* Increased padding */
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .work-arrangement-table th,
+body.dark-mode .work-arrangement-table td {
+  color: #e4e7eb;
+}
+
+.work-arrangement-table th {
+  background-color: #e9ecef; /* Light mode */
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  font-weight: 600; /* Added for better header visibility */
+}
+
+body.dark-mode .work-arrangement-table th {
+  background-color: #003087;
+}
+
+.work-arrangement-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light mode */
+}
+
+body.dark-mode .work-arrangement-table tr:nth-child(even) {
+  background-color: #0a2b5e;
+}
+
+/* Table footer */
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px; /* Increased margin */
+  width: 100%;
+}
+
+.nav-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode .nav-btn {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+body.dark-mode .nav-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.nav-btn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+body.dark-mode .nav-btn:disabled {
+  background-color: #7f8c8d;
+}
+
+.table-footer span {
+  font-size: 14px;
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .table-footer span {
+  color: #e4e7eb;
+}
+
+/* Action buttons */
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-btn {
+  color: #3498db;
+}
+
+.edit-btn:hover {
+  color: #2980b9;
+}
+
+.delete-btn {
+  color: #e74c3c;
+}
+
+.delete-btn:hover {
+  color: #c0392b;
+}
+
+body.dark-mode .action-btn {
+  color: #3498db;
+}
+
+body.dark-mode .edit-btn:hover,
+body.dark-mode .delete-btn:hover {
+  color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .work-arrangement-page-container {
+    width: 100%;
+    padding: 10px;
+    margin: 10px auto;
+  }
+
+  .work-arrangement-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .work-arrangement-page-container {
+    width: 100%;
+    padding: 5px;
+    margin: 5px auto;
+  }
+
+  .work-arrangement-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+
+  .table-section {
+    padding: 10px;
+  }
+}

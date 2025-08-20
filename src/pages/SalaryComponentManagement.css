@@ -1,0 +1,112 @@
+/* Container for the salary component management page */
+.salary-component-management {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: black;
+}
+
+.salary-component-management.body-dark-mode {
+  color: rgb(241, 236, 236);
+}
+
+/* Cards container */
+.salary-component-management .cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px; /* Retained increased gap */
+  margin-bottom: 30px;
+}
+
+/* Card styles */
+.salary-component-management .card {
+  width: 200px; /* Matched to CompanyManagement */
+  background-color: #041c42;
+  color: white;
+  padding: 25px; /* Matched to CompanyManagement */
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+  transition: all 0.5s ease-in-out;
+}
+
+
+.salary-component-management.body-dark-mode .card {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+/* Card title */
+.salary-component-management .card h3 {
+  font-size: 16px; /* Retained from previous request */
+  font-weight: 400; /* Non-bold */
+  margin-bottom: 10px; /* Matched to CompanyManagement */
+}
+
+/* Card link */
+.salary-component-management .card a {
+  color: #76d9ff;
+  text-decoration: none;
+  font-size: 14px; /* Retained from previous request */
+  font-weight: 400; /* Non-bold */
+}
+
+.salary-component-management.body-dark-mode .card a {
+  color: #3498db;
+}
+
+.salary-component-management .card a:hover {
+  text-decoration: underline;
+}
+
+/* Card icons */
+.salary-component-management .card-icon {
+  font-size: 30px; /* Matched to CompanyManagement */
+  margin-bottom: 10px; /* Matched to CompanyManagement */
+  color: white;
+}
+
+.salary-component-management.body-dark-mode .card-icon {
+  color: #e4e7eb;
+}
+
+/* Specific icon colors */
+.salary-component-management .earnings-icon {
+  color: #28a745; /* Green for Earnings */
+}
+
+.salary-component-management.body-dark-mode .earnings-icon {
+  color: #34c759;
+}
+
+.salary-component-management .deductions-icon {
+  color: #dc3545; /* Red for Deductions */
+}
+
+.salary-component-management.body-dark-mode .deductions-icon {
+  color: #f14668;
+}
+
+.salary-component-management .create-icon {
+  color: #17a2b8; /* Cyan for Create Salary Component */
+}
+
+.salary-component-management.body-dark-mode .create-icon {
+  color: #4dd0e1;
+}
+
+.salary-component-management .summary-icon {
+  color: #ffc107; /* Yellow for All Salary Components */
+}
+
+.salary-component-management.body-dark-mode .summary-icon {
+  color: #ffd700;
+}
+
+.salary-component-management .activity-icon {
+  color: #6f42c1; /* Purple for Recent Activity */
+}
+
+.salary-component-management.body-dark-mode .activity-icon {
+  color: #9b59b6;
+}

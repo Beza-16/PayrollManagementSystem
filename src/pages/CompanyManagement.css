@@ -1,0 +1,186 @@
+.company-management {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+body.dark-mode .company-management {
+  color: rgb(241, 236, 236);
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.card {
+  width: 200px;
+  background-color: #041c42;
+  color: white;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+  transition: all 0.5s ease-in-out;
+}
+
+body.dark-mode .card {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+.card-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+body.dark-mode .card-icon {
+  color: #e4e7eb;
+}
+
+.companies-icon {
+  color: #0077ff;
+}
+
+body.dark-mode .companies-icon {
+  color: #76d9ff;
+}
+
+.branches-icon {
+  color: #28a745;
+}
+
+body.dark-mode .branches-icon {
+  color: #34c759;
+}
+
+.departments-icon {
+  color: #6f42c1;
+}
+
+body.dark-mode .departments-icon {
+  color: #9b59b6;
+}
+
+.designations-icon {
+  color: #dc3545;
+}
+
+body.dark-mode .designations-icon {
+  color: #f14668;
+}
+
+.capability-icon {
+  color: #17a2b8;
+}
+
+body.dark-mode .capability-icon {
+  color: #4dd0e1;
+}
+
+.card a {
+  color: #76d9ff;
+  text-decoration: none;
+}
+
+body.dark-mode .card a {
+  color: #3498db;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+.companies-list {
+  margin-top: 20px;
+}
+
+.company-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #041c42;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+}
+
+body.dark-mode .company-table {
+  background-color: #0f518d;
+}
+
+.company-table th,
+.company-table td {
+  padding: 12px;
+  text-align: left;
+  color: white;
+}
+
+body.dark-mode .company-table th,
+body.dark-mode .company-table td {
+  color: #e4e7eb;
+}
+
+.company-table th {
+  background-color: #003087;
+}
+
+body.dark-mode .company-table th {
+  background-color: #1a3c6b;
+}
+
+.company-table tr:nth-child(even) {
+  background-color: #0a2b5e;
+}
+
+body.dark-mode .company-table tr:nth-child(even) {
+  background-color: #1f4a7d;
+}
+
+.edit-button,
+.delete-button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button {
+  background-color: #0077ff;
+  color: white;
+}
+
+body.dark-mode .edit-button {
+  background-color: #76d9ff;
+  color: #333;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+body.dark-mode .edit-button:hover {
+  background-color: #3498db;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+body.dark-mode .delete-button {
+  background-color: #ff6b6b;
+  color: #333;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+body.dark-mode .delete-button:hover {
+  background-color: #e63946;
+}

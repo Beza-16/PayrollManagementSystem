@@ -1,0 +1,156 @@
+/* Body defaults for light and dark modes */
+body {
+  background-color: #afc6d4; /* Light mode default */
+}
+
+body.dark-mode {
+  background-color: #09224a; /* Dark mode background */
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Modal content */
+.modal-content {
+  background-color: #afc6d4; /* Light mode */
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: relative;
+  color: #000000; /* Light mode */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  visibility: visible;
+  opacity: 1;
+}
+
+body.dark-mode .modal-content {
+  background-color: #041c42;
+  color: #e4e7eb;
+}
+
+/* Modal header */
+.modal-content h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .modal-content h2 {
+  color: #e4e7eb;
+}
+
+/* Form styles */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #000000; /* Light mode */
+}
+
+body.dark-mode .form-group label {
+  color: #e4e7eb;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+  background-color: #fff; /* Light mode */
+  color: #000000;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Form actions */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-actions button:first-child {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.form-actions button:first-child:hover {
+  background-color: #c0392b;
+}
+
+.form-actions button:last-child {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.form-actions button:last-child:hover {
+  background-color: #2980b9;
+}
+
+.form-actions button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Loading message */
+.loading-message {
+  text-align: center;
+  color: #000000;
+}
+
+body.dark-mode .loading-message {
+  color: #e4e7eb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    max-width: 90%;
+    max-height: 80vh;
+  }
+}
