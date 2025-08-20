@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "ybYB4X0NZxnsy8AoS2v+G/xj/0x0wOw9KtkZ1CJOrAM=",
+  "Source": "Payroll.Web",
+  "BasePath": "_content/Payroll.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
