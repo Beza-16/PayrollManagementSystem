@@ -1,0 +1,376 @@
+/* Body defaults for light and dark modes */
+body {
+  background-color: #afc6d4;
+  font-weight: normal;
+}
+
+body.dark-mode {
+  background-color: #09224a;
+  font-weight: normal;
+}
+
+/* Container styles */
+.overtime-rate-page-container {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #000000;
+  font-weight: normal;
+}
+
+body.dark-mode .overtime-rate-page-container {
+  background-color: #09224a;
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+/* Header styles */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-section h2 {
+  font-size: 18px;
+  color: #000000;
+  font-weight: normal;
+}
+
+body.dark-mode .header-section h2 {
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+/* Add button */
+.add-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: normal;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Success and Error messages */
+.success-message {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+body.dark-mode .success-message {
+  background-color: #27ae60;
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+.error-message {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+body.dark-mode .error-message {
+  background-color: #c0392b;
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+.loading-message {
+  background-color: #f5f5f5;
+  color: #424242;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+body.dark-mode .loading-message {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+/* Table section */
+.table-section {
+  margin-top: 20px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-weight: normal;
+}
+
+body.dark-mode .table-section {
+  background-color: #041c42;
+  font-weight: normal;
+}
+
+/* Filter section */
+.filter-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #000000;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+body.dark-mode .filter-input {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+/* Table wrapper */
+.table-wrapper {
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Search bar */
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #000000;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+body.dark-mode .search-bar {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+/* Overtime rate table */
+.overtime-rate-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+  color: #000000;
+  font-size: 12px;
+  font-weight: normal;
+  box-shadow: 0 4px 20px rgba(28, 94, 181, 0.97);
+}
+
+body.dark-mode .overtime-rate-table {
+  background-color: #041c42;
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+.overtime-rate-table th,
+.overtime-rate-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  color: #000000;
+  font-weight: normal;
+}
+
+body.dark-mode .overtime-rate-table th,
+body.dark-mode .overtime-rate-table td {
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+.overtime-rate-table th {
+  background-color: #e9ecef;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: normal;
+}
+
+body.dark-mode .overtime-rate-table th {
+  background-color: #003087;
+  font-weight: normal;
+}
+
+.overtime-rate-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+body.dark-mode .overtime-rate-table tr:nth-child(even) {
+  background-color: #0a2b5e;
+}
+
+/* Table footer */
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.nav-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: normal;
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode .nav-btn {
+  background-color: #3498db;
+  color: #fff;
+  font-weight: normal;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+body.dark-mode .nav-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.nav-btn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+body.dark-mode .nav-btn:disabled {
+  background-color: #7f8c8d;
+}
+
+.table-footer span {
+  font-size: 12px;
+  color: #000000;
+  font-weight: normal;
+}
+
+body.dark-mode .table-footer span {
+  color: #e4e7eb;
+  font-weight: normal;
+}
+
+/* Action buttons */
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.edit-btn {
+  color: #3498db;
+}
+
+.edit-btn:hover {
+  color: #2980b9;
+}
+
+.delete-btn {
+  color: #e74c3c;
+}
+
+.delete-btn:hover {
+  color: #c0392b;
+}
+
+body.dark-mode .action-btn {
+  color: #3498db;
+  font-weight: normal;
+}
+
+body.dark-mode .edit-btn:hover,
+body.dark-mode .delete-btn:hover {
+  color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .overtime-rate-page-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .overtime-rate-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .overtime-rate-page-container {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .overtime-rate-table {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .table-footer {
+    width: 100%;
+  }
+
+  .table-section {
+    padding: 10px;
+  }
+}

@@ -28,10 +28,11 @@ const EmployeeForm = ({ employee, onClose }) => {
     DepartmentID: '',
     DesignationID: '',
     BranchID: '',
+    location_id: '',
     FullName: '',
     PhoneNumber: '',
     Email: '',
-    Photo: '',
+    Photo: null,
     DOB: null,
     HireDate: null,
     Recruitment: 'Internal',
@@ -40,8 +41,7 @@ const EmployeeForm = ({ employee, onClose }) => {
     DepartmentType: 'Core',
     EmploymentType: 'Permanent',
     Status: 'Active',
-    CreatedAt: new Date(),
-    UpdatedAt: new Date(),
+    UserID: '',
   });
   const [locationData, setLocationData] = useState({
     country: '',
@@ -84,28 +84,28 @@ const EmployeeForm = ({ employee, onClose }) => {
         if (!Array.isArray(branchRes.data)) throw new Error('Branch API response is not an array');
 
         const companyOptions = companyRes.data
-          .filter(c => c.CompanyID && c.CompanyName)
-          .map(c => ({
+          .filter((c) => c.CompanyID && c.CompanyName)
+          .map((c) => ({
             value: c.CompanyID.toString(),
             label: c.CompanyName,
           }));
         const deptOptions = deptRes.data
-          .filter(d => d.DepartmentID && d.DepartmentName && d.BranchName)
-          .map(d => ({
+          .filter((d) => d.DepartmentID && d.DepartmentName && d.BranchName)
+          .map((d) => ({
             value: d.DepartmentID.toString(),
             label: d.DepartmentName,
             BranchName: d.BranchName,
           }));
         const desigOptions = desigRes.data
-          .filter(d => d.DesignationID && d.DesignationName)
-          .map(d => ({
+          .filter((d) => d.DesignationID && d.DesignationName)
+          .map((d) => ({
             value: d.DesignationID.toString(),
             label: d.DesignationName,
             DepartmentName: d.DepartmentName || 'N/A',
           }));
         const branchOptions = branchRes.data
-          .filter(b => b.BranchID && b.BranchName && b.CompanyID)
-          .map(b => ({
+          .filter((b) => b.BranchID && b.BranchName && b.CompanyID)
+          .map((b) => ({
             value: b.BranchID.toString(),
             label: b.BranchName,
             CompanyID: b.CompanyID.toString(),
@@ -116,7 +116,7 @@ const EmployeeForm = ({ employee, onClose }) => {
         setDesignations(desigOptions);
         setBranches(branchOptions);
 
-        const countryOptions = Country.getAllCountries().map(country => ({
+        const countryOptions = Country.getAllCountries().map((country) => ({
           value: country.isoCode,
           label: country.name,
         }));
@@ -129,13 +129,13 @@ const EmployeeForm = ({ employee, onClose }) => {
             });
             const loc = locResponse.data;
             setLocationData({
-              country: loc.country || '',
-              city: loc.city || '',
+              country: loc.Country || '',
+              city: loc.City || '',
             });
 
-            const selectedCountry = countryOptions.find(c => c.label === loc.country);
+            const selectedCountry = countryOptions.find((c) => c.label === loc.Country);
             if (selectedCountry) {
-              const cityOptions = City.getCitiesOfCountry(selectedCountry.value).map(city => ({
+              const cityOptions = City.getCitiesOfCountry(selectedCountry.value).map((city) => ({
                 value: city.name,
                 label: city.name,
               }));
@@ -149,10 +149,11 @@ const EmployeeForm = ({ employee, onClose }) => {
               DepartmentID: employee.DepartmentID?.toString() || '',
               DesignationID: employee.DesignationID?.toString() || '',
               BranchID: employee.BranchID?.toString() || '',
+              location_id: employee.location_id || '',
               FullName: employee.FullName || '',
               PhoneNumber: employee.PhoneNumber || '',
               Email: employee.Email || '',
-              Photo: employee.Photo || '',
+              Photo: null,
               DOB: employee.DOB ? new Date(employee.DOB) : null,
               HireDate: employee.HireDate ? new Date(employee.HireDate) : null,
               Recruitment: employee.Recruitment || 'Internal',
@@ -161,15 +162,16 @@ const EmployeeForm = ({ employee, onClose }) => {
               DepartmentType: employee.DepartmentType || 'Core',
               EmploymentType: employee.EmploymentType || 'Permanent',
               Status: employee.Status || 'Active',
+              UserID: employee.UserID?.toString() || '',
             });
           } catch (error) {
             console.error('Error fetching location details:', error.response?.data || error.message);
-            setFormErrors(prev => ({ ...prev, locationDetails: 'Failed to fetch location details' }));
+            setFormErrors((prev) => ({ ...prev, locationDetails: 'Failed to fetch location details' }));
           }
         }
       } catch (error) {
         console.error('Error fetching options:', error.response?.data || error.message);
-        setFormErrors(prev => ({ ...prev, submit: 'Failed to load dropdown options' }));
+        setFormErrors((prev) => ({ ...prev, submit: 'Failed to load dropdown options' }));
       } finally {
         setIsLoading(false);
         setShowSpinner(false);
@@ -181,29 +183,27 @@ const EmployeeForm = ({ employee, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setFormErrors(prev => ({ ...prev, [name]: '' }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const handleDateChange = (date, name) => {
-    setFormData(prev => ({ ...prev, [name]: date }));
-    setFormErrors(prev => ({ ...prev, [name]: '' }));
+    setFormData((prev) => ({ ...prev, [name]: date }));
+    setFormErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
-  const handlePhotoChange = (e) => {
+  const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1];
-        setFormData(prev => ({ ...prev, Photo: base64String }));
-      };
-      reader.readAsDataURL(file);
+    if (file && !file.type.startsWith('image/')) {
+      setFormErrors((prev) => ({ ...prev, Photo: 'Only image files are allowed' }));
+    } else {
+      setFormData((prev) => ({ ...prev, Photo: file }));
+      setFormErrors((prev) => ({ ...prev, Photo: '' }));
     }
   };
 
   const handleSelectChange = (selectedOption, { name }) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const newData = { ...prev, [name]: selectedOption ? selectedOption.value : '' };
       if (name === 'CompanyID') {
         newData.BranchID = '';
@@ -217,44 +217,51 @@ const EmployeeForm = ({ employee, onClose }) => {
       }
       return newData;
     });
-    setFormErrors(prev => ({ ...prev, [name]: '' }));
+    setFormErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const handleCountryChange = (selectedOption) => {
-    setLocationData(prev => ({
+    setLocationData((prev) => ({
       ...prev,
       country: selectedOption ? selectedOption.label : '',
       city: '',
     }));
-    setFormErrors(prev => ({ ...prev, country: '', city: '' }));
-    setCities(selectedOption ? City.getCitiesOfCountry(selectedOption.value).map(city => ({
-      value: city.name,
-      label: city.name,
-    })) : []);
+    setFormErrors((prev) => ({ ...prev, country: '', city: '' }));
+    setCities(
+      selectedOption
+        ? City.getCitiesOfCountry(selectedOption.value).map((city) => ({
+            value: city.name,
+            label: city.name,
+          }))
+        : []
+    );
   };
 
   const handleCityChange = (selectedOption) => {
-    setLocationData(prev => ({
+    setLocationData((prev) => ({
       ...prev,
       city: selectedOption ? selectedOption.label : '',
     }));
-    setFormErrors(prev => ({ ...prev, city: '' }));
+    setFormErrors((prev) => ({ ...prev, city: '' }));
   };
 
-  const filteredBranches = branches.filter(branch => {
+  const filteredBranches = branches.filter((branch) => {
     const branchCompanyIdStr = branch.CompanyID ? branch.CompanyID.toString() : '';
     const formCompanyIdStr = formData.CompanyID ? formData.CompanyID.toString() : '';
-    return !formData.CompanyID || (branchCompanyIdStr && branchCompanyIdStr !== '00000000-0000-0000-0000-000000000000' && branchCompanyIdStr === formCompanyIdStr);
+    return (
+      !formData.CompanyID ||
+      (branchCompanyIdStr && branchCompanyIdStr !== '00000000-0000-0000-0000-000000000000' && branchCompanyIdStr === formCompanyIdStr)
+    );
   });
 
-  const filteredDepartments = departments.filter(dept => {
-    const selectedBranch = branches.find(b => b.value === formData.BranchID);
+  const filteredDepartments = departments.filter((dept) => {
+    const selectedBranch = branches.find((b) => b.value === formData.BranchID);
     const selectedBranchName = selectedBranch ? selectedBranch.label : '';
     return !formData.BranchID || (dept.BranchName && dept.BranchName === selectedBranchName);
   });
 
-  const filteredDesignations = designations.filter(desig => {
-    const selectedDepartment = departments.find(d => d.value === formData.DepartmentID);
+  const filteredDesignations = designations.filter((desig) => {
+    const selectedDepartment = departments.find((d) => d.value === formData.DepartmentID);
     const deptName = selectedDepartment ? selectedDepartment.label : '';
     return !formData.DepartmentID || (desig.DepartmentName !== 'N/A' && desig.DepartmentName === deptName);
   });
@@ -267,7 +274,7 @@ const EmployeeForm = ({ employee, onClose }) => {
     if (!formData.DepartmentID || !isValidGuid(formData.DepartmentID)) {
       errors.DepartmentID = 'Valid Department ID is required';
     } else {
-      const selectedDepartment = departments.find(d => d.value === formData.DepartmentID);
+      const selectedDepartment = departments.find((d) => d.value === formData.DepartmentID);
       if (!selectedDepartment) {
         errors.DepartmentID = 'Selected department not found in available options';
       }
@@ -275,9 +282,14 @@ const EmployeeForm = ({ employee, onClose }) => {
     if (!formData.DesignationID || !isValidGuid(formData.DesignationID)) {
       errors.DesignationID = 'Valid Designation ID is required';
     } else {
-      const selectedDesignation = designations.find(d => d.value === formData.DesignationID);
-      const selectedDepartment = departments.find(d => d.value === formData.DepartmentID);
-      if (selectedDesignation && selectedDepartment && selectedDesignation.DepartmentName !== 'N/A' && selectedDesignation.DepartmentName !== selectedDepartment.label) {
+      const selectedDesignation = designations.find((d) => d.value === formData.DesignationID);
+      const selectedDepartment = departments.find((d) => d.value === formData.DepartmentID);
+      if (
+        selectedDesignation &&
+        selectedDepartment &&
+        selectedDesignation.DepartmentName !== 'N/A' &&
+        selectedDesignation.DepartmentName !== selectedDepartment.label
+      ) {
         errors.DesignationID = 'Designation must match the selected department';
       }
     }
@@ -291,6 +303,7 @@ const EmployeeForm = ({ employee, onClose }) => {
     if (!formData.DepartmentType) errors.DepartmentType = 'Department Type is required';
     if (!formData.EmploymentType) errors.EmploymentType = 'Employment Type is required';
     if (!formData.Status) errors.Status = 'Status is required';
+    if (formData.UserID && !isValidGuid(formData.UserID)) errors.UserID = 'Valid User ID is required';
     return errors;
   };
 
@@ -309,6 +322,7 @@ const EmployeeForm = ({ employee, onClose }) => {
     setShowSpinner(true);
     try {
       const token = localStorage.getItem('token') || '';
+      // Step 1: Save location
       const locationPayload = {
         country: locationData.country,
         city: locationData.city,
@@ -328,28 +342,37 @@ const EmployeeForm = ({ employee, onClose }) => {
       const locationId = locationResponse.data.location_id;
       if (!isValidGuid(locationId)) throw new Error('Invalid location ID');
 
-      const payload = {
-        CompanyID: formData.CompanyID,
-        DepartmentID: formData.DepartmentID,
-        DesignationID: formData.DesignationID,
-        BranchID: formData.BranchID,
-        location_id: locationId,
-        FullName: formData.FullName.trim(),
-        PhoneNumber: formData.PhoneNumber || null,
-        Email: formData.Email,
-        Photo: formData.Photo || null,
-        DOB: formData.DOB ? formData.DOB.toISOString().slice(0, 10) : null,
-        HireDate: formData.HireDate ? formData.HireDate.toISOString().slice(0, 10) : null,
-        Recruitment: formData.Recruitment,
-        RecruitmentType: formData.RecruitmentType,
-        RecruitmentOption: formData.RecruitmentOption,
-        DepartmentType: formData.DepartmentType,
-        EmploymentType: formData.EmploymentType,
-        Status: formData.Status,
-      };
-      if (isEditMode) payload.EmployeeID = formData.EmployeeID;
-      console.log('Submitting employee payload:', payload);
-      await handleSubmit(payload);
+      // Step 2: Build FormData matching backend's expected structure
+      const formDataToSend = new FormData();
+      // Append fields under 'employeeDto' to match backend [FromForm] EmployeeDto
+      formDataToSend.append('employeeDto.EmployeeID', isEditMode ? formData.EmployeeID : '');
+      formDataToSend.append('employeeDto.CompanyID', formData.CompanyID);
+      formDataToSend.append('employeeDto.DepartmentID', formData.DepartmentID);
+      formDataToSend.append('employeeDto.DesignationID', formData.DesignationID);
+      formDataToSend.append('employeeDto.BranchID', formData.BranchID);
+      formDataToSend.append('employeeDto.location_id', locationId);
+      formDataToSend.append('employeeDto.FullName', formData.FullName.trim());
+      formDataToSend.append('employeeDto.PhoneNumber', formData.PhoneNumber || '');
+      formDataToSend.append('employeeDto.Email', formData.Email);
+      formDataToSend.append('employeeDto.DOB', formData.DOB ? formData.DOB.toISOString().slice(0, 10) : '');
+      formDataToSend.append('employeeDto.HireDate', formData.HireDate ? formData.HireDate.toISOString().slice(0, 10) : '');
+      formDataToSend.append('employeeDto.Recruitment', formData.Recruitment);
+      formDataToSend.append('employeeDto.RecruitmentType', formData.RecruitmentType);
+      formDataToSend.append('employeeDto.RecruitmentOption', formData.RecruitmentOption);
+      formDataToSend.append('employeeDto.DepartmentType', formData.DepartmentType);
+      formDataToSend.append('employeeDto.EmploymentType', formData.EmploymentType);
+      formDataToSend.append('employeeDto.Status', formData.Status);
+      formDataToSend.append('employeeDto.UserID', formData.UserID || '');
+
+      if (formData.Photo) {
+        formDataToSend.append('photo', formData.Photo); // Backend expects 'photo' for IFormFile
+      }
+
+      // Debug: Log FormData contents
+      console.log('Submitting employee payload:', [...formDataToSend.entries()]);
+
+      // Step 3: Pass FormData directly to handleSubmit
+      await handleSubmit(formDataToSend, isEditMode);
       onClose();
     } catch (error) {
       console.error('Submission error:', {
@@ -360,7 +383,7 @@ const EmployeeForm = ({ employee, onClose }) => {
       });
       const validationErrors = error.response?.data?.errors || {};
       const errorMessage = error.response?.data?.error || 'Failed to submit employee';
-      setFormErrors(prev => ({
+      setFormErrors((prev) => ({
         ...prev,
         ...Object.keys(validationErrors).reduce((acc, key) => {
           acc[key] = validationErrors[key][0] || validationErrors[key];
@@ -383,7 +406,7 @@ const EmployeeForm = ({ employee, onClose }) => {
           {errorMessage && <div className="error-message" role="alert">{errorMessage}</div>}
           {successMessage && <div className="success-message" role="alert">{successMessage}</div>}
           {formErrors.submit && <div className="error-message" role="alert">{formErrors.submit}</div>}
-          <form onSubmit={onSubmit} aria-disabled={isSubmitting || isLoading}>
+          <form onSubmit={onSubmit} encType="multipart/form-data">
             <div className="form-grid">
               <div className="form-column">
                 <div className="form-group">
@@ -424,7 +447,7 @@ const EmployeeForm = ({ employee, onClose }) => {
                     inputId="CompanyID"
                     name="CompanyID"
                     options={companies}
-                    value={companies.find(c => c.value === formData.CompanyID) || null}
+                    value={companies.find((c) => c.value === formData.CompanyID) || null}
                     onChange={(option) => handleSelectChange(option, { name: 'CompanyID' })}
                     className={submitted && formErrors.CompanyID ? 'warning' : ''}
                     aria-invalid={submitted && !!formErrors.CompanyID}
@@ -441,7 +464,7 @@ const EmployeeForm = ({ employee, onClose }) => {
                     inputId="BranchID"
                     name="BranchID"
                     options={filteredBranches}
-                    value={filteredBranches.find(b => b.value === formData.BranchID) || null}
+                    value={filteredBranches.find((b) => b.value === formData.BranchID) || null}
                     onChange={(option) => handleSelectChange(option, { name: 'BranchID' })}
                     className={submitted && formErrors.BranchID ? 'warning' : ''}
                     aria-invalid={submitted && !!formErrors.BranchID}
@@ -462,7 +485,7 @@ const EmployeeForm = ({ employee, onClose }) => {
                     inputId="DepartmentID"
                     name="DepartmentID"
                     options={filteredDepartments}
-                    value={filteredDepartments.find(d => d.value === formData.DepartmentID) || null}
+                    value={filteredDepartments.find((d) => d.value === formData.DepartmentID) || null}
                     onChange={(option) => handleSelectChange(option, { name: 'DepartmentID' })}
                     className={submitted && formErrors.DepartmentID ? 'warning' : ''}
                     aria-invalid={submitted && !!formErrors.DepartmentID}
@@ -483,7 +506,7 @@ const EmployeeForm = ({ employee, onClose }) => {
                     inputId="DesignationID"
                     name="DesignationID"
                     options={filteredDesignations}
-                    value={filteredDesignations.find(d => d.value === formData.DesignationID) || null}
+                    value={filteredDesignations.find((d) => d.value === formData.DesignationID) || null}
                     onChange={(option) => handleSelectChange(option, { name: 'DesignationID' })}
                     className={submitted && formErrors.DesignationID ? 'warning' : ''}
                     aria-invalid={submitted && !!formErrors.DesignationID}
@@ -504,7 +527,7 @@ const EmployeeForm = ({ employee, onClose }) => {
                     inputId="country"
                     name="country"
                     options={countries}
-                    value={countries.find(c => c.label === locationData.country) || null}
+                    value={countries.find((c) => c.label === locationData.country) || null}
                     onChange={handleCountryChange}
                     className={submitted && formErrors.country ? 'warning' : ''}
                     aria-invalid={submitted && !!formErrors.country}
@@ -522,7 +545,7 @@ const EmployeeForm = ({ employee, onClose }) => {
                     inputId="city"
                     name="city"
                     options={cities}
-                    value={cities.find(c => c.label === locationData.city) || null}
+                    value={cities.find((c) => c.label === locationData.city) || null}
                     onChange={handleCityChange}
                     className={submitted && formErrors.city ? 'warning' : ''}
                     aria-invalid={submitted && !!formErrors.city}
@@ -554,13 +577,16 @@ const EmployeeForm = ({ employee, onClose }) => {
                   )}
                 </div>
                 <div className="form-group">
-                  <label htmlFor="Photo">Photo</label>
+                  <label htmlFor="Photo">Upload Photo</label>
                   <input
                     id="Photo"
                     type="file"
                     accept="image/*"
-                    onChange={handlePhotoChange}
+                    onChange={handlePhotoUpload}
                   />
+                  {submitted && formErrors.Photo && (
+                    <span id="Photo-error" className="warning-message">{formErrors.Photo}</span>
+                  )}
                 </div>
                 <div className="form-group">
                   <label htmlFor="DOB">Date of Birth</label>
@@ -601,8 +627,10 @@ const EmployeeForm = ({ employee, onClose }) => {
                     aria-invalid={submitted && !!formErrors.Recruitment}
                     aria-describedby={submitted && formErrors.Recruitment ? 'Recruitment-error' : undefined}
                   >
-                    {recruitmentTypes.map(type => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
+                    {recruitmentTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
                     ))}
                   </select>
                   {submitted && formErrors.Recruitment && (
@@ -621,8 +649,10 @@ const EmployeeForm = ({ employee, onClose }) => {
                     aria-describedby={submitted && formErrors.RecruitmentType ? 'RecruitmentType-error' : undefined}
                   >
                     <option value="">Select Recruitment Type</option>
-                    {recruitmentTypes.map(type => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
+                    {recruitmentTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
                     ))}
                   </select>
                   {submitted && formErrors.RecruitmentType && (
@@ -700,6 +730,22 @@ const EmployeeForm = ({ employee, onClose }) => {
                   </select>
                   {submitted && formErrors.Status && (
                     <span id="Status-error" className="warning-message">{formErrors.Status}</span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="UserID">User ID (Optional)</label>
+                  <input
+                    id="UserID"
+                    type="text"
+                    name="UserID"
+                    value={formData.UserID}
+                    onChange={handleChange}
+                    className={submitted && formErrors.UserID ? 'warning' : ''}
+                    aria-invalid={submitted && !!formErrors.UserID}
+                    aria-describedby={submitted && formErrors.UserID ? 'UserID-error' : undefined}
+                  />
+                  {submitted && formErrors.UserID && (
+                    <span id="UserID-error" className="warning-message">{formErrors.UserID}</span>
                   )}
                 </div>
               </div>

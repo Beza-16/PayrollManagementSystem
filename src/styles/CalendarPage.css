@@ -1,0 +1,122 @@
+.calendar-page-container {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #000000;
+  font-weight: normal;
+}
+
+body.dark-mode .calendar-page-container {
+  background-color: #09224a;
+  color: #e4e7eb;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-section h2 {
+  font-size: 18px;
+  color: #000000;
+  font-weight: normal;
+}
+
+body.dark-mode .header-section h2 {
+  color: #e4e7eb;
+}
+
+.add-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: normal;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.add-btn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.period-select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #000000;
+  font-size: 12px;
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+body.dark-mode .period-select {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+}
+
+.error-message,
+.success-message,
+.loading-message {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.error-message {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+body.dark-mode .error-message {
+  background-color: #c0392b;
+}
+
+.success-message {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+body.dark-mode .success-message {
+  background-color: #27ae60;
+}
+
+.loading-message {
+  background-color: #3498db;
+  color: #fff;
+}
+
+body.dark-mode .loading-message {
+  background-color: #2980b9;
+}
+
+@media (max-width: 768px) {
+  .calendar-page-container {
+    padding: 5px;
+  }
+
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .period-select,
+  .add-btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

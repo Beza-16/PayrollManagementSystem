@@ -1,180 +1,187 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 
-const useLeaveSlice = (leaveBaseUrl = 'https://localhost:14686/api/Leave', employeeBaseUrl = 'https://localhost:14686/api/Employee') => {
+const useLeaveSlice = (baseUrl = 'https://localhost:14686/api/Leave') => {
   const [leaves, setLeaves] = useState([]);
-  const [employees, setEmployees] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const timeoutIds = useRef([]);
   const retryCount = useRef(0);
   const maxRetries = 3;
-  const retryDelay = 1000;
 
-  const leaveAxios = axios.create({
-    baseURL: leaveBaseUrl,
-    headers: { 'Content-Type': 'application/json' },
-    timeout: 10000,
-  });
+  const token = localStorage.getItem('token');
 
-  const employeeAxios = axios.create({
-    baseURL: employeeBaseUrl,
-    headers: { 'Content-Type': 'application/json' },
-    timeout: 10000,
-  });
-
-  const fetchEmployees = useCallback(async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await employeeAxios.get('', {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-      const employeeData = response.data.map(emp => ({
-        EmployeeID: emp.EmployeeID?.toString() || '',
-        FullName: emp.FullName || emp.EmployeeName || 'Unknown',
-      }));
-      console.log('Fetched employees:', employeeData);
-      setEmployees(employeeData);
-      return employeeData;
-    } catch (error) {
-      console.error('Error fetching employees:', error);
-      setEmployees([]);
-      return [];
+  // Debug token and base URL
+  useEffect(() => {
+    console.log('Token from localStorage:', token);
+    console.log('Using baseUrl:', baseUrl);
+    if (!token) {
+      console.warn('No token found in localStorage. Authentication may fail.');
+    } else {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Token payload:', payload);
+      } catch (e) {
+        console.warn('Unable to decode token:', e.message);
+      }
     }
-  }, []);
+  }, [token, baseUrl]);
 
-  const fetchLeaves = useCallback(async (isMyLeaves = false, attempt = 1) => {
+  const axiosInstance = useRef(
+    axios.create({
+      baseURL: baseUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+      timeout: 10000,
+    })
+  ).current;
+
+  const fetchAllLeaves = useCallback(async () => {
     if (retryCount.current >= maxRetries) {
-      setErrorMessage('Failed to fetch leaves after multiple attempts.');
+      setErrorMessage('Failed to fetch leaves after multiple attempts. Check authentication or server.');
       return;
     }
 
     setIsFetching(true);
     setErrorMessage('');
     try {
-      const token = localStorage.getItem('token');
-      const endpoint = isMyLeaves ? '' : ''; // Adjust endpoint as needed
-      const params = isMyLeaves ? { view: 'requests', status: 'All' } : { view: 'requests', status: 'All' };
-      const response = await leaveAxios.get(endpoint, {
-        headers: { 'Authorization': `Bearer ${token}` },
-        params,
-      });
-
-      if (employees.length === 0) {
-        await fetchEmployees();
-      }
+      console.log('Request config:', { url: 'all', headers: axiosInstance.defaults.headers });
+      const response = await axiosInstance.get('all');
+      console.log(`Fetched ${response.data.length} leaves. Full response:`, response.data);
 
       const mappedLeaves = response.data.map((leave) => ({
         LeaveID: leave.LeaveID,
         EmployeeID: leave.EmployeeID,
-        EmployeeFullName: leave.EmployeeFullName || employees.find(emp => emp.EmployeeID === leave.EmployeeID)?.FullName || 'N/A',
+        EmployeeName: leave.EmployeeName,
         LeaveTypeID: leave.LeaveTypeID,
-        LeaveTypeName: leave.LeaveTypeName || 'N/A',
+        LeaveTypeName: leave.LeaveTypeName,
         StartDate: leave.StartDate,
         EndDate: leave.EndDate,
-        LeaveDescription: leave.LeaveDescription || 'N/A',
-        Status: leave.Status, // Keep as integer
-        MedicalDocument: leave.MedicalDocument || '',
-        LeaveOfficesFiled: leave.LeaveOfficesFiled || false,
-        AnnualLeaveDate: leave.AnnualLeaveDate,
-        RejectionReason: leave.RejectionReason || '',
-        ApprovedBy: leave.ApprovedBy || '',
-        LeaveWithPay: leave.LeaveWithPay || false,
-        MedicalApproval: leave.MedicalApproval || false,
-        HRApprovalRequired: leave.HRApprovalRequired || false,
+        NumberOfDays: leave.NumberOfDays,
+        IsHalfDay: leave.IsHalfDay,
+        LeaveDescription: leave.LeaveDescription,
+        MedicalDocument: leave.MedicalDocument,
+        AttachmentFilePath: leave.AttachmentFilePath,
+        Status: leave.Status,
+        RejectionReason: leave.RejectionReason,
+        ApprovedByName: leave.ApprovedByName,
         CreatedAt: leave.CreatedAt,
         UpdatedAt: leave.UpdatedAt,
       }));
-      setLeaves(mappedLeaves || []);
+
+      setLeaves(mappedLeaves);
       retryCount.current = 0;
     } catch (error) {
-      console.error('Fetch error:', error);
       const errorMsg = error.response
-        ? `Failed to fetch leaves: ${error.response.status} - ${error.response.statusText} - ${JSON.stringify(error.response.data)}`
+        ? `Failed to fetch leaves: ${error.response.status} - ${error.response.statusText} - ${error.response.data?.message || 'No details'}`
         : `Failed to fetch leaves: ${error.message}`;
-      if (attempt <= maxRetries) {
-        setTimeout(() => fetchLeaves(isMyLeaves, attempt + 1), retryDelay * attempt);
-        retryCount.current += 1;
-      } else {
-        setErrorMessage(errorMsg);
+      console.error('Fetch error details:', error, { config: error.config, response: error.response });
+      setErrorMessage(errorMsg);
+      if (error.response?.status === 401) {
+        console.warn('401 Unauthorized: Ensure token includes "Admin" role and is valid.');
+      } else if (error.response?.status === 404) {
+        console.warn('404 Not Found: Check if the server is running at', baseUrl, 'or if the endpoint is registered.');
       }
+      retryCount.current += 1;
     } finally {
       setIsFetching(false);
     }
-  }, [employees]);
+  }, [axiosInstance, baseUrl]);
+
+  const fetchPendingLeaves = useCallback(async () => {
+    if (retryCount.current >= maxRetries) {
+      setErrorMessage('Failed to fetch pending leaves after multiple attempts. Check authentication or server.');
+      return;
+    }
+
+    setIsFetching(true);
+    setErrorMessage('');
+    try {
+      console.log('Request config:', { url: 'pending', headers: axiosInstance.defaults.headers });
+      const response = await axiosInstance.get('pending');
+      console.log(`Fetched ${response.data.length} pending leaves. Full response:`, response.data);
+
+      const mappedLeaves = response.data.map((leave) => ({
+        LeaveID: leave.LeaveID,
+        EmployeeID: leave.EmployeeID,
+        EmployeeName: leave.EmployeeName,
+        LeaveTypeID: leave.LeaveTypeID,
+        LeaveTypeName: leave.LeaveTypeName,
+        StartDate: leave.StartDate,
+        EndDate: leave.EndDate,
+        NumberOfDays: leave.NumberOfDays,
+        IsHalfDay: leave.IsHalfDay,
+        LeaveDescription: leave.LeaveDescription,
+        MedicalDocument: leave.MedicalDocument,
+        AttachmentFilePath: leave.AttachmentFilePath,
+        Status: leave.Status,
+        RejectionReason: leave.RejectionReason,
+        ApprovedByName: leave.ApprovedByName,
+        CreatedAt: leave.CreatedAt,
+        UpdatedAt: leave.UpdatedAt,
+      }));
+
+      setLeaves(mappedLeaves);
+      retryCount.current = 0;
+    } catch (error) {
+      const errorMsg = error.response
+        ? `Failed to fetch pending leaves: ${error.response.status} - ${error.response.statusText} - ${error.response.data?.message || 'No details'}`
+        : `Failed to fetch pending leaves: ${error.message}`;
+      console.error('Fetch error details:', error, { config: error.config, response: error.response });
+      setErrorMessage(errorMsg);
+      if (error.response?.status === 401) {
+        console.warn('401 Unauthorized: Ensure token includes "Admin" role and is valid.');
+      } else if (error.response?.status === 404) {
+        console.warn('404 Not Found: Check if the server is running at', baseUrl, 'or if the endpoint is registered.');
+      }
+      retryCount.current += 1;
+    } finally {
+      setIsFetching(false);
+    }
+  }, [axiosInstance, baseUrl]);
 
   useEffect(() => {
-    fetchLeaves();
-  }, [fetchLeaves]);
+    fetchAllLeaves();
+  }, [fetchAllLeaves]);
 
-  const handleSubmit = async (leaveData) => {
+  const handleAction = async (payload) => {
     setIsSubmitting(true);
     setErrorMessage('');
     const timeoutId = setTimeout(() => setErrorMessage('Request timed out'), 10000);
     timeoutIds.current.push(timeoutId);
 
     try {
-      const token = localStorage.getItem('token');
-      const isEdit = leaveData.LeaveID && leaveData.LeaveID.trim() !== '';
+      const response = await axiosInstance.put(`action/${payload.LeaveID}`, {
+        Status: payload.Status,
+        RejectionReason: payload.RejectionReason,
+      });
 
-      const requiredFields = ['EmployeeID', 'LeaveTypeID', 'StartDate', 'EndDate', 'LeaveDescription'];
-      const missingFields = requiredFields.filter(field => !leaveData[field] || (typeof leaveData[field] === 'string' && !leaveData[field].trim()));
-      if (missingFields.length > 0) {
-        throw new Error(`Missing or empty required fields: ${missingFields.join(', ')}`);
-      }
-
-      const formatDate = (date) => {
-        if (!date || !(date instanceof Date) || isNaN(date)) {
-          console.warn('Invalid date detected, using current date:', date);
-          return new Date().toISOString();
-        }
-        return date.toISOString();
-      };
-
-      const payload = {
-        EmployeeID: leaveData.EmployeeID.trim(),
-        LeaveTypeID: leaveData.LeaveTypeID,
-        StartDate: formatDate(leaveData.StartDate),
-        EndDate: formatDate(leaveData.EndDate),
-        LeaveDescription: leaveData.LeaveDescription || '',
-        MedicalDocument: leaveData.MedicalDocument || null,
-        LeaveOfficesFiled: leaveData.LeaveOfficesFiled || false,
-        AnnualLeaveDate: leaveData.AnnualLeaveDate ? formatDate(leaveData.AnnualLeaveDate) : null,
-      };
-
-      if (isEdit) {
-        payload.LeaveID = leaveData.LeaveID;
-        const statusPayload = {
-          Status: parseInt(leaveData.Status, 10),
-          RejectionReason: leaveData.Status === 2 ? leaveData.RejectionReason || null : null,
-        };
-        await leaveAxios.put(`/${leaveData.LeaveID}/status`, statusPayload, {
-          headers: { 'Authorization': `Bearer ${token}` },
-        });
+      if ([200, 204].includes(response.status)) {
+        setSuccessMessage(`Leave ${payload.Status === 1 ? 'approved' : 'rejected'} successfully`);
+        await fetchAllLeaves(); // Refresh all leaves after action
+        const successTimeout = setTimeout(() => setSuccessMessage(''), 10000);
+        timeoutIds.current.push(successTimeout);
+        return response.data;
       } else {
-        await leaveAxios.post('', payload, {
-          headers: { 'Authorization': `Bearer ${token}` },
-        });
+        throw new Error(`Unexpected status code: ${response.status}`);
       }
-
-      setSuccessMessage(isEdit ? 'Updated successfully' : 'Submitted successfully');
-      await fetchLeaves();
-      const successTimeout = setTimeout(() => setSuccessMessage(''), 5000);
-      timeoutIds.current.push(successTimeout);
     } catch (error) {
-      console.error('Submit error:', error);
-      const errorDetails = error.response?.data?.errors
-        ? Object.values(error.response.data.errors).flat().join(', ')
-        : error.response?.data?.error || error.message;
       const errorMsg = error.response
-        ? `Failed to ${leaveData.LeaveID ? 'update' : 'add'} leave: ${error.response.status} - ${errorDetails}`
-        : `Failed to ${leaveData.LeaveID ? 'update' : 'add'} leave: ${error.message}`;
+        ? `Failed to update leave: ${error.response.status} - ${error.response.data?.message || error.response.statusText}`
+        : `Failed to update leave: ${error.message}`;
+      console.error('Action error details:', error.response?.data || error);
       setErrorMessage(errorMsg);
-      const errorTimeout = setTimeout(() => setErrorMessage(''), 5000);
+      if (error.response?.status === 400) {
+        console.warn('400 Bad Request: Check payload structure.');
+      } else if (error.response?.status === 401) {
+        console.warn('401 Unauthorized: Ensure token includes "Admin" role and is valid.');
+      }
+      const errorTimeout = setTimeout(() => setErrorMessage(''), 10000);
       timeoutIds.current.push(errorTimeout);
       throw error;
     } finally {
@@ -184,53 +191,15 @@ const useLeaveSlice = (leaveBaseUrl = 'https://localhost:14686/api/Leave', emplo
     }
   };
 
-  const handleDelete = async (leaveId) => {
-    if (!leaveId || leaveId === 'undefined') {
-      setErrorMessage('Cannot delete leave: Invalid leave ID');
-      return;
-    }
-
-    setIsDeleting(true);
-    setErrorMessage('');
-    const timeoutId = setTimeout(() => setErrorMessage('Request timed out'), 10000);
-    timeoutIds.current.push(timeoutId);
-
-    try {
-      const token = localStorage.getItem('token');
-      await leaveAxios.delete(`/${leaveId}`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-      setSuccessMessage('Deleted successfully');
-      await fetchLeaves();
-      const successTimeout = setTimeout(() => setSuccessMessage(''), 5000);
-      timeoutIds.current.push(successTimeout);
-    } catch (error) {
-      console.error('Delete error:', error);
-      const errorMsg = error.response
-        ? `Failed to delete leave: ${error.response.status} - ${error.response.statusText}`
-        : `Failed to delete leave: ${error.message}`;
-      setErrorMessage(errorMsg);
-      const errorTimeout = setTimeout(() => setErrorMessage(''), 5000);
-      timeoutIds.current.push(errorTimeout);
-    } finally {
-      setIsDeleting(false);
-      clearTimeout(timeoutId);
-      timeoutIds.current = timeoutIds.current.filter((id) => id !== timeoutId);
-    }
-  };
-
   return {
     leaves,
-    employees,
     successMessage,
     errorMessage,
     isFetching,
     isSubmitting,
-    isDeleting,
-    fetchLeaves,
-    fetchEmployees,
-    handleSubmit,
-    handleDelete,
+    fetchAllLeaves,
+    fetchPendingLeaves,
+    handleAction,
   };
 };
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\PayrollMVC\\Payroll\\Payroll.Web\\Payroll.Web.csproj": {}
+    "C:\\Users\\Bezawit\\payroll 2\\payroll\\backend\\Payroll\\Payroll.Web\\Payroll.Web.csproj": {}
   },
   "projects": {
-    "D:\\PayrollMVC\\Payroll\\Payroll.Web\\Payroll.Web.csproj": {
+    "C:\\Users\\Bezawit\\payroll 2\\payroll\\backend\\Payroll\\Payroll.Web\\Payroll.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PayrollMVC\\Payroll\\Payroll.Web\\Payroll.Web.csproj",
+        "projectUniqueName": "C:\\Users\\Bezawit\\payroll 2\\payroll\\backend\\Payroll\\Payroll.Web\\Payroll.Web.csproj",
         "projectName": "Payroll.Web",
-        "projectPath": "D:\\PayrollMVC\\Payroll\\Payroll.Web\\Payroll.Web.csproj",
+        "projectPath": "C:\\Users\\Bezawit\\payroll 2\\payroll\\backend\\Payroll\\Payroll.Web\\Payroll.Web.csproj",
         "packagesPath": "C:\\Users\\Bezawit\\.nuget\\packages\\",
-        "outputPath": "D:\\PayrollMVC\\Payroll\\Payroll.Web\\obj\\",
+        "outputPath": "C:\\Users\\Bezawit\\payroll 2\\payroll\\backend\\Payroll\\Payroll.Web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

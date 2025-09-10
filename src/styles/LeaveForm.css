@@ -1,254 +1,161 @@
-/* Scoped CSS for LeaveForm with enforced two-column layout */
-:root {
-  --primary-color: #2563eb;
-  --primary-hover: #1e40af;
-  --danger-color: #ef4444;
-  --danger-hover: #dc2626;
-  --success-color: #10b981;
-  --success-hover: #059669;
-  --text-color-light: #1a202c;
-  --text-color-dark: #e2e8f0;
-  --modal-bg-light: rgba(255, 255, 255, 0.95);
-  --modal-bg-dark: rgba(30, 41, 59, 0.95);
-  --border-radius: 8px;
-  --shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  --transition: all 0.2s ease;
-}
-
-.leave-form .modal-overlay {
+/* Overlay for modal */
+.leave-form-overlay {
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fade-in 0.2s ease-out;
 }
 
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.leave-form .modal-content {
-  background: var(--modal-bg-light);
-  padding: 0.8rem;
-  border-radius: var(--border-radius);
-  width: 100%;
+/* Container for form */
+.leave-form-container {
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-radius: 8px;
+  width: 80%;
   max-width: 400px;
   max-height: 70vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-weight: normal;
+  overflow-y: auto; /* Allow vertical scroll only if content exceeds height */
 }
 
-body.dark-mode .leave-form .modal-content {
-  background: var(--modal-bg-dark);
-  border-color: rgba(255, 255, 255, 0.2);
+body.dark-mode .leave-form-container {
+  background-color: #041c42;
+  font-weight: normal;
 }
 
-.leave-form .modal-content h2 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 0.6rem;
-  color: var(--text-color-light);
+/* Form header */
+.leave-form-container h2 {
+  font-size: 16px;
+  color: #000000;
+  margin-bottom: 10px;
+  font-weight: normal;
   text-align: center;
 }
 
-body.dark-mode .leave-form .modal-content h2 {
-  color: var(--text-color-dark);
+body.dark-mode .leave-form-container h2 {
+  color: #e4e7eb;
+  font-weight: normal;
 }
 
-.leave-form .form-grid {
-  display: grid;
-  gap: 0.6rem;
+/* Form group */
+.form-group {
+  margin-bottom: 10px;
 }
 
-.leave-form .form-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-  min-width: 0; /* Prevent grid overflow */
+.form-group label {
+  display: block;
+  font-size: 12px;
+  color: #000000;
+  margin-bottom: 4px;
+  font-weight: normal;
 }
 
-.leave-form .form-column {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-width: 0; /* Ensure columns shrink properly */
+body.dark-mode .form-group label {
+  color: #e4e7eb;
+  font-weight: normal;
 }
 
-.leave-form .form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.leave-form .form-group label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  margin-bottom: 0.2rem;
-  color: var(--text-color-light);
-}
-
-body.dark-mode .leave-form .form-group label {
-  color: var(--text-color-dark);
-}
-
-.leave-form .form-group input,
-.leave-form .form-group select,
-.leave-form .form-group textarea,
-.leave-form .form-group .form-control {
+.form-group input,
+.form-group textarea,
+.form-group select {
   width: 100%;
-  padding: 0.4rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 5px;
-  font-size: 0.8rem;
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--text-color-light);
-  transition: var(--transition);
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #000000;
+  font-size: 12px;
+  font-weight: normal;
   box-sizing: border-box;
 }
 
-body.dark-mode .leave-form .form-group input,
-body.dark-mode .leave-form .form-group select,
-body.dark-mode .leave-form .form-group textarea,
-body.dark-mode .leave-form .form-group .form-control {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: var(--text-color-dark);
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea,
+body.dark-mode .form-group select {
+  background-color: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
+  font-weight: normal;
 }
 
-.leave-form .form-group input:focus,
-.leave-form .form-group select:focus,
-.leave-form .form-group textarea:focus,
-.leave-form .form-group .form-control:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-}
-
-.leave-form .form-group input.error,
-.leave-form .form-group select.error,
-.leave-form .form-group textarea.error,
-.leave-form .form-group .form-control.error {
-  border-color: var(--danger-color);
-}
-
-.leave-form .form-group textarea {
-  min-height: 50px;
+.form-group textarea {
   resize: vertical;
+  min-height: 50px;
+  max-height: 100px;
 }
 
-.leave-form .form-group input[type="checkbox"] {
-  width: auto;
-  height: 0.9rem;
-  margin-right: 0.3rem;
-  accent-color: var(--primary-color);
-}
-
-.leave-form .error-message {
-  color: var(--danger-color);
-  font-size: 0.6rem;
-  margin-top: 0.2rem;
-}
-
-.leave-form .success-message {
-  background: var(--success-color);
-  color: white;
-  padding: 0.4rem;
-  margin-bottom: 0.5rem;
-  border-radius: 5px;
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-body.dark-mode .leave-form .success-message {
-  background: var(--success-hover);
-}
-
-.leave-form .form-actions {
+/* Form actions */
+.form-actions {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 15px;
 }
 
-.leave-form .form-actions button {
-  padding: 0.4rem 0.7rem;
+.cancel-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 6px 12px;
   border: none;
-  border-radius: 5px;
-  font-size: 0.8rem;
+  border-radius: 4px;
   cursor: pointer;
-  transition: var(--transition);
-  min-width: 70px;
+  font-size: 12px;
+  font-weight: normal;
+  transition: background-color 0.3s ease;
+  flex: 1;
 }
 
-.leave-form .form-actions button[type="submit"] {
-  background: var(--primary-color);
-  color: white;
+.cancel-btn:hover {
+  background-color: #c0392b;
 }
 
-.leave-form .form-actions button[type="submit"]:hover:not(:disabled) {
-  background: var(--primary-hover);
+body.dark-mode .cancel-btn {
+  background-color: #c0392b;
+  font-weight: normal;
 }
 
-.leave-form .form-actions button[type="button"] {
-  background: var(--danger-color);
-  color: white;
+body.dark-mode .cancel-btn:hover {
+  background-color: #a93226;
 }
 
-.leave-form .form-actions button[type="button"]:hover:not(:disabled) {
-  background: var(--danger-hover);
+.submit-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: normal;
+  transition: background-color 0.3s ease;
+  flex: 1;
 }
 
-.leave-form .form-actions button:disabled {
-  background: #d1d5db;
-  opacity: 0.6;
+.submit-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+body.dark-mode .submit-btn {
+  background-color: #3498db;
+  font-weight: normal;
+}
+
+body.dark-mode .submit-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.submit-btn:disabled {
+  background-color: #bdc3c7;
   cursor: not-allowed;
 }
 
-body.dark-mode .leave-form .form-actions button:disabled {
-  background: #4b5563;
-}
-
-@media (max-width: 600px) {
-  .leave-form .modal-content {
-    max-width: 90%;
-    padding: 0.6rem;
-  }
-
-  .leave-form .modal-content h2 {
-    font-size: 1rem;
-  }
-
-  .leave-form .form-columns {
-    grid-template-columns: 1fr;
-  }
-
-  .leave-form .form-actions {
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .leave-form .form-actions button {
-    width: 100%;
-  }
-}
-
-.leave-form :focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-.leave-form .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+body.dark-mode .submit-btn:disabled {
+  background-color: #7f8c8d;
 }

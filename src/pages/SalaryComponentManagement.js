@@ -11,12 +11,12 @@ const SalaryComponentManagement = () => {
         <div className="card">
           <FaMoneyBillWave className="card-icon earnings-icon" />
           <h3>Earnings</h3>
-          <Link to="/earnings/add">Go to Form</Link>
+          <Link to="/earnings">Go to Earnings</Link>
         </div>
         <div className="card">
           <FaMinusCircle className="card-icon deductions-icon" />
           <h3>Deductions</h3>
-          <Link to="/deductions/add">Go to Form</Link>
+          <Link to="/deductions">Go to Deductions</Link>
         </div>
         <div className="card">
           <FaPlusCircle className="card-icon create-icon" />

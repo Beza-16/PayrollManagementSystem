@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUser, FaClock, FaGraduationCap, FaFileUpload } from 'react-icons/fa';
+import { FaUser, FaClock, FaFileAlt, FaFileUpload } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
 const EmployeeManagement = () => {
@@ -37,12 +37,12 @@ const EmployeeManagement = () => {
           </Link>
         </div>
         <div className="card bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
-          <FaGraduationCap className="card-icon qualifications-icon text-red-500 text-4xl mb-4 mx-auto" />
-          <h3 className="text-xl font-semibold text-gray-700 text-center mb-4">Qualifications</h3>
+          <FaFileAlt className="card-icon records-icon text-red-500 text-4xl mb-4 mx-auto" />
+          <h3 className="text-xl font-semibold text-gray-700 text-center mb-4">Employee Records</h3>
           <Link
-            to="/qualifications"
+            to="/employee-records"
             className="block text-center text-blue-600 hover:text-blue-800 font-medium"
-            onClick={() => console.log('Navigating to Qualifications')}
+            onClick={() => console.log('Navigating to Employee Records')}
           >
             Go to Form
           </Link>
@@ -58,8 +58,6 @@ const EmployeeManagement = () => {
             Go to Form
           </Link>
         </div>
-
-        {/* New Card for Create User Account */}
         <div className="card bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
           <FaUser className="card-icon user-account-icon text-green-500 text-4xl mb-4 mx-auto" />
           <h3 className="text-xl font-semibold text-gray-700 text-center mb-4">Create User Account</h3>

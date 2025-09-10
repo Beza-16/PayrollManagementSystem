@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Payroll.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+334de68d0f70ac6559cc7a7bb7fbda08b0380166")]
 [assembly: System.Reflection.AssemblyProductAttribute("Payroll.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Payroll.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

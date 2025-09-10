@@ -349,7 +349,7 @@ body.dark-mode .employee-page-container .details-btn:hover {
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
-  width: 720px;           /* Match the desired desktop width */
+  width: 720px;
   max-width: 95%;
   max-height: 90vh;
   overflow-y: auto;
@@ -389,14 +389,24 @@ body.dark-mode .pdf-style {
   display: block;
 }
 
-/* Placeholder box if no photo */
-.pdf-style .employee-photo.placeholder {
+/* Placeholder box if no photo (moved to global scope) */
+.employee-photo.placeholder {
+  width: 180px;
+  height: 180px;
+  background: #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #666;
-  font-size: 14px;
+  font-size: 16px;
   border: 1px dashed #ccc;
+  border-radius: 8px;
+}
+
+body.dark-mode .employee-photo.placeholder {
+  background: #0a2b5e;
+  color: #e4e7eb;
+  border-color: #3498db;
 }
 
 /* Company/branch/department below the photo */

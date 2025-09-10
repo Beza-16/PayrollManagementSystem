@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MdDashboard, MdOutlineAttachMoney } from 'react-icons/md';
-import { FaBuilding, FaUsers, FaMoneyCheckAlt, FaRegClock, FaMoneyBillWave, FaCalendarAlt, FaCogs } from 'react-icons/fa';
+import { FaBuilding, FaUsers, FaMoneyCheckAlt, FaRegClock, FaMoneyBillWave, FaCalendarAlt, FaCogs, FaListAlt } from 'react-icons/fa';
 import { GiPayMoney } from 'react-icons/gi';
 import './Sidebar.css';
 
@@ -54,13 +54,13 @@ function Sidebar({ isVisible: propVisible, onToggle: propOnToggle }) {
           </li>
           <li>
             <Link
-              to="/leave-request"
-              className={`flex items-center px-5 py-2 ${isActive('/leave-request')}`}
-              aria-label="Leave Management"
-              title="Leave Management (default: Leave Requests)"
+              to="/leave-management"
+              className={`flex items-center px-5 py-2 ${isActive('/leave-management')}`}
+              aria-label="Leave & Attendance"
+              title="Leave & Attendance"
             >
               <FaCalendarAlt className="icon" style={{ color: '#F44336' }} />
-              <span>Leave Management</span>
+              <span>Leave & Attendance</span>
             </Link>
           </li>
           <li>
@@ -118,7 +118,7 @@ function Sidebar({ isVisible: propVisible, onToggle: propOnToggle }) {
               <span>Payroll Generation</span>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               to="/role-management"
               className={`flex items-center px-5 py-2 ${isActive('/role-management')}`}
@@ -128,7 +128,7 @@ function Sidebar({ isVisible: propVisible, onToggle: propOnToggle }) {
               <FaCogs className="icon" style={{ color: '#17a2b8' }} />
               <span>Role Management</span>
             </Link>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </div>

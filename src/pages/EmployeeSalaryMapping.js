@@ -16,7 +16,7 @@ const EmployeeSalaryMapping = () => {
         <div className="card">
           <FaListAlt className="card-icon view-icon" />
           <h3>View All Mappings</h3>
-          <Link to="/employee-salary-mapping">Go to List</Link>
+          <Link to="/employee-salary-mapping/list">Go to List</Link>
         </div>
         <div className="card">
           <FaHistory className="card-icon recent-icon" />

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
-import { FaPlus, FaMinus, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaMinus, FaEdit, FaTrash, FaSync } from 'react-icons/fa';
 import { useEmployeeSlice } from '../slices/EmployeeSlice';
 import debounce from 'lodash.debounce';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import API_BASE_URL from '../config'; // Import the config file
 import '../styles/EmployeePage.css';
 
 const EmployeeForm = lazy(() => import('../components/EmployeeForm'));
@@ -23,10 +24,7 @@ const EmployeePage = () => {
     fetchEmployees();
   }, [fetchEmployees]);
 
-  const debouncedSearch = useMemo(
-    () => debounce((value) => setSearchTerm(value), 300),
-    []
-  );
+  const debouncedSearch = useMemo(() => debounce((value) => setSearchTerm(value), 300), []);
 
   useEffect(() => {
     return () => debouncedSearch.cancel();
@@ -58,10 +56,7 @@ const EmployeePage = () => {
   const totalPages = Math.max(1, Math.ceil(filteredEmployees.length / employeesPerPage));
 
   const handleAddOrEditEmployee = (employee) => {
-    setEditEmployee(employee ? {
-      ...employee,
-      location_id: employee.location_id || '',
-    } : null);
+    setEditEmployee(employee ? { ...employee, location_id: employee.location_id || '' } : null);
     setShowEmployeeModal(true);
   };
 
@@ -86,6 +81,7 @@ const EmployeePage = () => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
+
   const toggleDetails = (employeeId) => {
     setExpandedRows((prev) => ({ ...prev, [employeeId]: !prev[employeeId] }));
   };
@@ -97,8 +93,7 @@ const EmployeePage = () => {
     try {
       if (!date) return 'N/A';
       const d = new Date(date);
-      if (isNaN(d)) return date;
-      return d.toISOString().split('T')[0];
+      return isNaN(d) ? date : d.toISOString().split('T')[0];
     } catch {
       return 'N/A';
     }
@@ -113,11 +108,13 @@ const EmployeePage = () => {
 
   const handleDownloadPDF = async () => {
     const input = document.getElementById('employee-profile');
-    if (!input) return;
+    if (!input) {
+      console.error('Employee profile element not found');
+      return;
+    }
 
     const canvas = await html2canvas(input, { scale: 2, useCORS: true, backgroundColor: '#fff' });
     const imgData = canvas.toDataURL('image/png');
-
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -125,36 +122,47 @@ const EmployeePage = () => {
     const imgWidth = pdfWidth - margin * 2;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    if (imgHeight <= pdfHeight - margin * 2) {
-      pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
-    } else {
-      const scaledImgWidth = (canvas.width * (pdfHeight - margin * 2)) / canvas.height;
-      pdf.addImage(imgData, 'PNG', margin, margin, scaledImgWidth, pdfHeight - margin * 2);
-    }
-
+    pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight > pdfHeight - margin * 2 ? (pdfHeight - margin * 2) * (imgWidth / imgHeight) : imgWidth, imgHeight > pdfHeight - margin * 2 ? pdfHeight - margin * 2 : imgHeight);
     const fileName = `${(selectedEmployee?.FullName || 'employee').replace(/\s+/g, '_')}_profile.pdf`;
     pdf.save(fileName);
   };
 
-  const renderPagination = () => {
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <button
-          key={i}
-          className={`nav-btn ${currentPage === i ? 'bg-blue-500' : ''}`}
-          onClick={() => handlePageChange(i)}
-          aria-label={`Go to page ${i}`}
-        >
-          {i}
+  const renderPagination = useMemo(() => {
+    return Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <button
+        key={page}
+        className={`nav-btn ${currentPage === page ? 'bg-blue-500' : ''}`}
+        onClick={() => handlePageChange(page)}
+        aria-label={`Go to page ${page}`}
+      >
+        {page}
+      </button>
+    ));
+  }, [totalPages, currentPage]);
+
+  const SkeletonRow = () => (
+    <tr>
+      {Array(5).fill().map((_, i) => (
+        <td key={i} className="skeleton" style={{ width: i === 0 ? '20%' : i === 4 ? '25%' : '15%' }}>
+          <div className="skeleton-bar" />
+        </td>
+      ))}
+    </tr>
+  );
+
+  if (errorMessage && !employees.length) {
+    return (
+      <div className="error-container" role="alert">
+        <p>{errorMessage}</p>
+        <button onClick={fetchEmployees} aria-label="Retry fetching employees">
+          <FaSync /> Retry
         </button>
-      );
-    }
-    return pages;
-  };
+      </div>
+    );
+  }
 
   return (
-    <div className="employee-page-container" role="main" aria-label="Employee Management" style={{ fontSize: '14px' }}>
+    <div className="employee-page-container" role="main" aria-label="Employee Management">
       <div className="header-section">
         <h2>All Employees</h2>
         <button
@@ -162,16 +170,12 @@ const EmployeePage = () => {
           onClick={() => handleAddOrEditEmployee(null)}
           aria-label="Add new employee"
         >
-          + Add New Employee
+          <FaPlus /> Add New Employee
         </button>
       </div>
 
-      {errorMessage && (
-        <div className="error-message" role="alert">{errorMessage}</div>
-      )}
-      {successMessage && (
-        <div className="success-message" role="alert">{successMessage}</div>
-      )}
+      {errorMessage && <div className="error-message" role="alert">{errorMessage}</div>}
+      {successMessage && <div className="success-message" role="alert">{successMessage}</div>}
       {isFetching && (
         <div className="loading-message" role="status">
           <div className="loading-spinner">Loading employees...</div>
@@ -224,7 +228,9 @@ const EmployeePage = () => {
               </tr>
             </thead>
             <tbody>
-              {currentEmployees.length > 0 ? (
+              {isFetching ? (
+                Array(employeesPerPage).fill().map((_, i) => <SkeletonRow key={i} />)
+              ) : currentEmployees.length > 0 ? (
                 currentEmployees.map((employee) => (
                   <React.Fragment key={employee.EmployeeID || `temp-${Math.random()}`}>
                     <tr>
@@ -232,6 +238,7 @@ const EmployeePage = () => {
                         <button
                           className="action-btn details-btn"
                           onClick={() => toggleDetails(employee.EmployeeID)}
+                          aria-expanded={!!expandedRows[employee.EmployeeID]}
                           aria-label={expandedRows[employee.EmployeeID] ? 'Hide details' : 'View details'}
                         >
                           {expandedRows[employee.EmployeeID] ? <FaMinus color="#3498db" size="14px" /> : <FaPlus color="#3498db" size="14px" />}
@@ -300,7 +307,7 @@ const EmployeePage = () => {
           >
             Prev
           </button>
-          {renderPagination()}
+          {renderPagination}
           <button
             className="nav-btn"
             onClick={() => handlePageChange(currentPage + 1)}
@@ -320,31 +327,35 @@ const EmployeePage = () => {
           role="dialog"
           aria-labelledby="employee-details-title"
         >
-          <div className="modal-content pdf-style profile-pdf" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content pdf-style profile-pdf"
+            onClick={(e) => e.stopPropagation()}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Escape' && handleCloseDetails()}
+          >
             <div id="employee-profile" className="employee-profile">
               <div className="left-col">
                 {selectedEmployee.Photo ? (
                   <img
-                    src={
-                      selectedEmployee.Photo.startsWith?.('data:')
-                        ? selectedEmployee.Photo
-                        : `data:image/jpeg;base64,${selectedEmployee.Photo}`
-                    }
-                    alt={selectedEmployee.FullName || 'Employee photo'}
+                    src={`${API_BASE_URL}${selectedEmployee.Photo}`} // Updated to https://localhost:14686
+                    alt={`${selectedEmployee.FullName || 'Employee'} photo`}
                     className="employee-photo"
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    onError={(e) => {
+                      console.error(`Failed to load photo for ${selectedEmployee.FullName} at ${API_BASE_URL}${selectedEmployee.Photo}`, e);
+                      e.currentTarget.style.display = 'none'; // Hide image on error
+                    }}
+                    onLoad={() => console.log(`Successfully loaded photo for ${selectedEmployee.FullName} at ${API_BASE_URL}${selectedEmployee.Photo}`)}
+                    crossOrigin="anonymous"
                   />
                 ) : (
                   <div className="employee-photo placeholder">No Photo</div>
                 )}
-
                 <div className="company-branch-dept">
                   <p><strong>Company:</strong> {selectedEmployee.CompanyName || selectedEmployee.Company || 'N/A'}</p>
                   <p><strong>Branch:</strong> {selectedEmployee.BranchName || selectedEmployee.Branch || 'N/A'}</p>
                   <p><strong>Department:</strong> {selectedEmployee.DepartmentName || selectedEmployee.Department || 'N/A'}</p>
                 </div>
               </div>
-
               <div className="right-col">
                 <div className="right-top" style={{ textAlign: 'left' }}>
                   <p style={{ fontSize: '18px', fontWeight: 700 }}><strong>Employee Name:</strong> {selectedEmployee.FullName || 'N/A'}</p>
@@ -355,7 +366,6 @@ const EmployeePage = () => {
                   <p><strong>Country:</strong> {selectedEmployee.Country || 'N/A'}</p>
                   <p><strong>Hire Date:</strong> {formatDate(selectedEmployee.HireDate)}</p>
                 </div>
-
                 <div className="right-bottom" style={{ textAlign: 'left', marginTop: 12 }}>
                   <p style={{ fontWeight: 700 }}><strong>Contact:</strong></p>
                   <p><strong>Phone:</strong> {selectedEmployee.PhoneNumber || selectedEmployee.Phone || 'N/A'}</p>
@@ -363,10 +373,13 @@ const EmployeePage = () => {
                 </div>
               </div>
             </div>
-
             <div className="modal-actions">
-              <button className="download-pdf-btn" onClick={handleDownloadPDF}>Download</button>
-              <button className="close-btn" onClick={handleCloseDetails}>Close</button>
+              <button className="download-pdf-btn" onClick={handleDownloadPDF} aria-label="Download employee profile as PDF">
+                Download PDF
+              </button>
+              <button className="close-btn" onClick={handleCloseDetails} aria-label="Close employee details">
+                Close
+              </button>
             </div>
           </div>
         </div>
@@ -376,3 +389,6 @@ const EmployeePage = () => {
 };
 
 export default EmployeePage;
+
+
+

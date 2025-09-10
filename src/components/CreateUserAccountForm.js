@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useUserSlice } from '../slices/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchRole } from '../slices/roleSlice';
 import Select from 'react-select';
 import { FaSpinner } from 'react-icons/fa';
 import '../styles/CreateUserAccountForm.css';
 
 const CreateUserAccountForm = ({ onClose, onUserCreated, userToEdit }) => {
-  const { employees, roles, handleSubmit, isSubmitting, errorMessage, successMessage, fetchEmployees, fetchRoles } = useUserSlice();
+  const dispatch = useDispatch();
+  const { employees, handleSubmit, isSubmitting, errorMessage, successMessage, fetchEmployees } = useUserSlice();
+  const { roles, loading: roleLoading, error: roleError } = useSelector((state) => state.role || {
+    roles: [],
+    loading: false,
+    error: null,
+  });
   const [formData, setFormData] = useState({
-    Password: userToEdit?.Password || generateDefaultPassword(), // Auto-generate password for new users
+    Username: '',
+    Email: '',
+    Password: userToEdit?.Password || generateDefaultPassword(),
     RoleId: userToEdit?.RoleId || '',
     EmployeeId: userToEdit?.EmployeeId || '',
   });
@@ -15,24 +25,29 @@ const CreateUserAccountForm = ({ onClose, onUserCreated, userToEdit }) => {
 
   useEffect(() => {
     fetchEmployees();
-    fetchRoles();
-  }, [fetchEmployees, fetchRoles]);
+    dispatch(fetchRole());
+  }, [fetchEmployees, dispatch]);
 
   useEffect(() => {
     if (userToEdit) {
       const employee = employees.find((emp) => emp.EmployeeID === userToEdit.EmployeeId);
-      const email = employee && employee.Email !== 'N/A' ? employee.Email : '';
-      const username = email ? email.split('@')[0] : (employee ? employee.FullName.replace(/\s+/g, '').toLowerCase() : '');
+      const email = employee && employee.Email !== 'N/A' ? employee.Email : userToEdit.Email || '';
+      const username = userToEdit.Username || (email ? email.split('@')[0] : (employee ? employee.FullName.replace(/\s+/g, '').toLowerCase() : ''));
       setFormData({
-        Password: userToEdit.Password || '', // Keep existing password for editing
+        Username: username,
+        Email: email,
+        Password: userToEdit.Password || generateDefaultPassword(),
         RoleId: userToEdit.RoleId || '',
         EmployeeId: userToEdit.EmployeeId || '',
-        Email: email,
-        Username: username,
       });
     } else {
-      // Reset to default password for new user creation
-      setFormData((prev) => ({ ...prev, Password: generateDefaultPassword() }));
+      setFormData({
+        Username: '',
+        Email: '',
+        Password: generateDefaultPassword(),
+        RoleId: '',
+        EmployeeId: '',
+      });
     }
   }, [userToEdit, employees]);
 
@@ -81,35 +96,35 @@ const CreateUserAccountForm = ({ onClose, onUserCreated, userToEdit }) => {
     if (!validateForm()) return;
 
     try {
-      const userData = {
-        Username: formData.Username,
-        Email: formData.Email,
-        Password: formData.Password,
-        RoleId: formData.RoleId,
-        EmployeeId: formData.EmployeeId || null,
-      };
-
-      const response = await handleSubmit(userData);
+      const response = await handleSubmit(formData);
       const selectedEmployee = employees.find((emp) => emp.EmployeeID === formData.EmployeeId);
-      const selectedRole = roles.find((r) => r.id === formData.RoleId);
+      const selectedRole = roles.find((r) => r.value === formData.RoleId);
       const createdUser = {
+        UserID: response.userId,
         Username: formData.Username,
         Email: formData.Email,
         Password: response.password || formData.Password,
-        RoleName: selectedRole ? selectedRole.name : 'N/A',
+        RoleId: formData.RoleId,
+        RoleName: selectedRole ? selectedRole.label : 'N/A',
+        EmployeeId: formData.EmployeeId,
         Employee: selectedEmployee ? selectedEmployee.FullName : 'N/A',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
       };
       onUserCreated(createdUser);
-      setFormData({ Password: generateDefaultPassword(), RoleId: '', EmployeeId: '' }); // Reset with new default password
+      setFormData({
+        Username: '',
+        Email: '',
+        Password: generateDefaultPassword(),
+        RoleId: '',
+        EmployeeId: '',
+      });
     } catch (error) {
       console.error('Form submission error:', error);
       setFormErrors((prev) => ({ ...prev, submit: error.message || 'Failed to submit user' }));
     }
   };
 
-  // Function to generate a default password
   function generateDefaultPassword() {
     const length = 12;
     const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
@@ -118,12 +133,12 @@ const CreateUserAccountForm = ({ onClose, onUserCreated, userToEdit }) => {
       const randomIndex = Math.floor(Math.random() * charset.length);
       password += charset[randomIndex];
     }
-    return password; // Returns a 12-character random password
+    return password;
   }
 
   const roleOptions = roles.map((role) => ({
-    value: role.id,
-    label: role.name,
+    value: role.value,
+    label: role.label,
   }));
 
   const employeeOptions = employees.map((emp) => ({
@@ -136,11 +151,12 @@ const CreateUserAccountForm = ({ onClose, onUserCreated, userToEdit }) => {
       <div className="modal-content">
         <h2>{userToEdit ? 'Edit User Account' : 'Create New User Account'}</h2>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {roleError && <div className="error-message">{roleError}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
         {formErrors.submit && <div className="error-message">{formErrors.submit}</div>}
-        {isSubmitting && (
+        {(isSubmitting || roleLoading) && (
           <div className="loading-message" role="status">
-            <FaSpinner className="loading-spinner-icon" /> Submitting...
+            <FaSpinner className="loading-spinner-icon" /> Loading...
           </div>
         )}
 
@@ -163,7 +179,7 @@ const CreateUserAccountForm = ({ onClose, onUserCreated, userToEdit }) => {
               <div className="form-group">
                 <label>Password</label>
                 <input
-                  type="text" // Changed to text to allow viewing the default password
+                  type="text"
                   value={formData.Password}
                   onChange={handlePasswordChange}
                   disabled={isSubmitting}

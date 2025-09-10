@@ -11,12 +11,12 @@ const OvertimeRateManagement = () => {
         <div className="card">
           <FaPlusCircle className="card-icon add-icon" />
           <h3>Add Overtime Rate</h3>
-          <Link to="/overtime-rate-management/add">Go to Form</Link>
+          <Link to="/overtime-rate-management/list">Go to List</Link>
         </div>
         <div className="card">
           <FaListAlt className="card-icon view-icon" />
           <h3>View All Rates</h3>
-          <Link to="/overtime-rate-management">Go to List</Link>
+          <Link to="/overtime-rate-management/list">Go to List</Link>
         </div>
         <div className="card">
           <FaClock className="card-icon active-icon" />

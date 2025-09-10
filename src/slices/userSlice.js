@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-const API_BASE_URL = 'https://localhost:14686';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://localhost:14686';
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -11,20 +11,36 @@ const axiosInstance = axios.create({
   timeout: 30000,
 });
 
-// Fetch employees to populate dropdown
+const CancelToken = axios.CancelToken;
+let cancel;
+
+const retry = async (fn, retries = 3, delay = 2000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (i === retries - 1 || err.code !== 'ERR_NETWORK') throw err;
+      console.log(`Retry ${i + 1} for ${fn.name}`);
+      await new Promise((resolve) => setTimeout(resolve, delay * Math.pow(2, i)));
+    }
+  }
+};
+
 export const fetchEmployeesThunk = createAsyncThunk(
   'user/fetchEmployees',
   async (_, { rejectWithValue }) => {
-    try {
+    const fetch = async () => {
       const token = localStorage.getItem('token');
+      console.log('Fetching employees with token:', token);
       if (!token) {
-        console.warn('No token found in localStorage for /api/Employee request');
-        return rejectWithValue('Please log in to access employee data');
+        throw new Error('Please log in to access employee data');
       }
       const response = await axiosInstance.get('/api/Employee', {
         headers: { Authorization: `Bearer ${token}` },
+        cancelToken: new CancelToken((c) => (cancel = c)),
       });
-      const mappedEmployees = response.data.map((employee) => ({
+      console.log('Employees response:', response.data);
+      return response.data.map((employee) => ({
         ...employee,
         City: employee.City || 'N/A',
         Country: employee.Country || 'N/A',
@@ -32,9 +48,22 @@ export const fetchEmployeesThunk = createAsyncThunk(
         FullName: employee.FullName || employee.Name || 'N/A',
         Email: employee.Email || 'N/A',
       }));
-      return mappedEmployees;
+    };
+    try {
+      return await retry(fetch);
     } catch (err) {
-      console.error('Error fetching employees:', err.response?.status, err.response?.data || err.message);
+      if (axios.isCancel(err)) {
+        return rejectWithValue('Request cancelled');
+      }
+      console.error('Error fetching employees:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        config: err.config,
+      });
+      if (err.code === 'ERR_NETWORK' || err.message.includes('ERR_EMPTY_RESPONSE')) {
+        return rejectWithValue('Network error: Server did not respond. Ensure the backend is running at ' + API_BASE_URL + ' and allows requests from https://localhost:3002.');
+      }
       if (err.response?.status === 401) {
         return rejectWithValue('Unauthorized: Please log in or refresh your session');
       }
@@ -43,52 +72,41 @@ export const fetchEmployeesThunk = createAsyncThunk(
   }
 );
 
-// Fetch roles
-export const fetchRoleThunk = createAsyncThunk(
-  'user/fetchRole',
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axiosInstance.get('/api/Role', {
-        headers: { Authorization: token ? `Bearer ${token}` : '' },
-      });
-      const rolesData = Array.isArray(response.data) ? response.data : response.data?.data || [];
-      const mappedRoles = rolesData.map((role) => ({
-        id: role.RoleID?.toString() || '',
-        name: role.RoleName || 'Unnamed Role',
-      }));
-      return mappedRoles;
-    } catch (err) {
-      console.error('Error fetching roles:', err.response?.status, err.response?.data || err.message);
-      if (err.response?.status === 401) {
-        return rejectWithValue('Unauthorized: Please log in or refresh your session');
-      }
-      return rejectWithValue(err.response?.data?.error || 'Error fetching roles');
-    }
-  }
-);
-
-// Fetch all users
 export const fetchUsersThunk = createAsyncThunk(
   'user/fetchUsers',
   async (_, { rejectWithValue }) => {
-    try {
+    const fetch = async () => {
       const token = localStorage.getItem('token');
+      console.log('Fetching users with token:', token);
       if (!token) {
-        console.warn('No token found in localStorage for /api/users request');
-        return rejectWithValue('Please log in to access user data');
+        throw new Error('Please log in to access user data');
       }
       const response = await axiosInstance.get('/api/users', {
         headers: { Authorization: `Bearer ${token}` },
+        cancelToken: new CancelToken((c) => (cancel = c)),
       });
-      const users = response.data.map(user => ({
+      console.log('Users response:', response.data);
+      return response.data.map((user) => ({
         ...user,
         RoleName: user.Role?.RoleName || 'N/A',
         Employee: user.Employee?.FullName || 'N/A',
       }));
-      return users;
+    };
+    try {
+      return await retry(fetch);
     } catch (err) {
-      console.error('Error fetching users:', err.response?.status, err.response?.data || err.message);
+      if (axios.isCancel(err)) {
+        return rejectWithValue('Request cancelled');
+      }
+      console.error('Error fetching users:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        config: err.config,
+      });
+      if (err.code === 'ERR_NETWORK' || err.message.includes('ERR_EMPTY_RESPONSE')) {
+        return rejectWithValue('Network error: Server did not respond. Ensure the backend is running at ' + API_BASE_URL + ' and allows requests from https://localhost:3002.');
+      }
       if (err.response?.status === 401) {
         return rejectWithValue('Unauthorized: Please log in or refresh your session');
       }
@@ -97,24 +115,39 @@ export const fetchUsersThunk = createAsyncThunk(
   }
 );
 
-// Register user
 export const registerUserThunk = createAsyncThunk(
   'user/registerUser',
   async ({ userData }, { rejectWithValue }) => {
-    try {
+    const fetch = async () => {
       const token = localStorage.getItem('token');
+      console.log('Registering user with token:', token);
       const response = await axiosInstance.post('/api/users', userData, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
+        cancelToken: new CancelToken((c) => (cancel = c)),
       });
+      console.log('Register user response:', response.data);
       return { userId: response.data.userId, password: response.data.defaultPassword, userData };
+    };
+    try {
+      return await retry(fetch);
     } catch (err) {
-      console.error('Registration error:', err.response?.status, err.response?.data || err.message);
+      if (axios.isCancel(err)) {
+        return rejectWithValue('Request cancelled');
+      }
+      console.error('Registration error:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        config: err.config,
+      });
+      if (err.code === 'ERR_NETWORK' || err.message.includes('ERR_EMPTY_RESPONSE')) {
+        return rejectWithValue('Network error: Server did not respond. Ensure the backend is running at ' + API_BASE_URL + ' and allows requests from https://localhost:3002.');
+      }
       return rejectWithValue(err.response?.data?.error || 'Error creating user account');
     }
   }
 );
 
-// Custom hook
 export const useUserSlice = () => {
   const dispatch = useDispatch();
   const [successMessage, setSuccessMessage] = useState('');
@@ -122,57 +155,34 @@ export const useUserSlice = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const timeoutIds = useRef([]);
   const lastMessage = useRef({ success: '', error: '' });
-  const isFetching = useRef(false);
 
-  const { employees, roles, users, loading, roleLoading, error, roleError, successMessage: sliceSuccessMessage } = useSelector(
+  const { employees, users, loading, error, successMessage: sliceSuccessMessage } = useSelector(
     (state) => state.user || {
       employees: [],
-      roles: [],
       users: [],
       loading: false,
-      roleLoading: false,
       error: null,
-      roleError: null,
       successMessage: null,
     }
   );
 
   const fetchEmployees = useCallback(async () => {
-    if (isFetching.current || employees.length > 0) return;
-    isFetching.current = true;
+    if (employees.length > 0) return;
     setErrorMessage('');
     try {
       await dispatch(fetchEmployeesThunk()).unwrap();
     } catch (error) {
       setErrorMessage(error || 'Failed to fetch employees');
-    } finally {
-      isFetching.current = false;
     }
   }, [dispatch, employees.length]);
 
-  const fetchRoles = useCallback(async () => {
-    if (isFetching.current || roles.length > 0) return;
-    isFetching.current = true;
-    setErrorMessage('');
-    try {
-      await dispatch(fetchRoleThunk()).unwrap();
-    } catch (error) {
-      setErrorMessage(error || 'Failed to fetch roles');
-    } finally {
-      isFetching.current = false;
-    }
-  }, [dispatch, roles.length]);
-
   const fetchUsers = useCallback(async () => {
-    if (isFetching.current || users.length > 0) return;
-    isFetching.current = true;
+    if (users.length > 0) return;
     setErrorMessage('');
     try {
       await dispatch(fetchUsersThunk()).unwrap();
     } catch (error) {
       setErrorMessage(error || 'Failed to fetch users');
-    } finally {
-      isFetching.current = false;
     }
   }, [dispatch, users.length]);
 
@@ -180,7 +190,7 @@ export const useUserSlice = () => {
     async (userData) => {
       setIsSubmitting(true);
       setErrorMessage('');
-      const timeoutId = setTimeout(() => setErrorMessage('Request timed out'), 10000);
+      const timeoutId = setTimeout(() => setErrorMessage('Request timed out'), 30000);
       timeoutIds.current.push(timeoutId);
       try {
         const cleanedUserData = {
@@ -210,13 +220,19 @@ export const useUserSlice = () => {
   );
 
   useEffect(() => {
-    fetchEmployees();
-    fetchRoles();
-    fetchUsers();
-  }, [fetchEmployees, fetchRoles, fetchUsers]);
+    const fetchData = async () => {
+      await fetchEmployees();
+      await fetchUsers();
+    };
+    fetchData();
+    return () => {
+      if (cancel) cancel();
+      timeoutIds.current.forEach(clearTimeout);
+    };
+  }, [fetchEmployees, fetchUsers]);
 
   useEffect(() => {
-    const newError = error || roleError;
+    const newError = error;
     const newSuccess = sliceSuccessMessage;
 
     if (newSuccess && newSuccess !== lastMessage.current.success) {
@@ -240,19 +256,16 @@ export const useUserSlice = () => {
     }
 
     return () => timeoutIds.current.forEach(clearTimeout);
-  }, [sliceSuccessMessage, error, roleError]);
+  }, [sliceSuccessMessage, error]);
 
   return {
     employees,
-    roles,
     users,
     loading,
-    roleLoading,
-    error: errorMessage || error || roleError,
+    error: errorMessage || error,
     successMessage,
     isSubmitting,
     fetchEmployees,
-    fetchRoles,
     fetchUsers,
     handleSubmit,
   };
@@ -262,12 +275,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     employees: [],
-    roles: [],
     users: [],
     loading: false,
-    roleLoading: false,
     error: null,
-    roleError: null,
     successMessage: null,
   },
   reducers: {},
@@ -284,18 +294,6 @@ const userSlice = createSlice({
       .addCase(fetchEmployeesThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-      .addCase(fetchRoleThunk.pending, (state) => {
-        state.roleLoading = true;
-        state.roleError = null;
-      })
-      .addCase(fetchRoleThunk.fulfilled, (state, action) => {
-        state.roleLoading = false;
-        state.roles = action.payload;
-      })
-      .addCase(fetchRoleThunk.rejected, (state, action) => {
-        state.roleLoading = false;
-        state.roleError = action.payload;
       })
       .addCase(fetchUsersThunk.pending, (state) => {
         state.loading = true;

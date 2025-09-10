@@ -15,7 +15,6 @@ const useEmployeeSlice = (employeeBaseUrl = 'https://localhost:14686/api/Employe
 
   const employeeAxios = axios.create({
     baseURL: employeeBaseUrl,
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token') || ''}` },
     timeout: 30000,
   });
 
@@ -34,12 +33,24 @@ const useEmployeeSlice = (employeeBaseUrl = 'https://localhost:14686/api/Employe
         headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` },
         cancelToken: cancelTokenSource.current.token,
       });
-      const mappedEmployees = response.data.map((employee) => ({
-        ...employee,
-        City: employee.City || 'N/A',
-        Country: employee.Country || 'N/A',
-        location_id: employee.EmployeeID || '',
-      }));
+
+      const mappedEmployees = response.data.map((employee) => {
+        let photoPath = employee.Photo || '';
+
+        // Add default extension if missing
+        if (photoPath && !photoPath.includes('.')) {
+          photoPath += '.jpg'; // change to '.png' if your files are PNG
+        }
+
+        return {
+          ...employee,
+          City: employee.City || 'N/A',
+          Country: employee.Country || 'N/A',
+          Photo: photoPath,
+          location_id: employee.location_id || employee.EmployeeID || '',
+        };
+      });
+
       setEmployees(mappedEmployees || []);
       retryCount.current = 0;
     } catch (error) {
@@ -67,21 +78,28 @@ const useEmployeeSlice = (employeeBaseUrl = 'https://localhost:14686/api/Employe
     };
   }, [fetchEmployees]);
 
-  const handleSubmit = async (employeeData) => {
+  const handleSubmit = async (formData, isEditMode) => {
     setIsSubmitting(true);
     setErrorMessage('');
     cancelTokenSource.current = CancelToken.source();
 
     try {
-      const isEdit = employeeData.EmployeeID && employeeData.EmployeeID.trim() !== '';
-      const response = await employeeAxios[isEdit ? 'put' : 'post'](
-        isEdit ? `/${employeeData.EmployeeID}` : '',
-        employeeData,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` },
-          cancelToken: cancelTokenSource.current.token,
-        }
-      );
+      const isEdit = isEditMode && formData.get('employeeDto.EmployeeID')?.trim() !== '';
+      const url = isEdit ? `/${formData.get('employeeDto.EmployeeID')}` : '';
+
+      console.log('Sending FormData to API:', [...formData.entries()]);
+
+      const response = await employeeAxios({
+        method: isEdit ? 'PUT' : 'POST',
+        url,
+        data: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        cancelToken: cancelTokenSource.current.token,
+      });
+
       setSuccessMessage(isEdit ? 'Updated successfully' : 'Added successfully');
       await fetchEmployees();
       setTimeout(() => setSuccessMessage(''), 5000);
@@ -96,7 +114,7 @@ const useEmployeeSlice = (employeeBaseUrl = 'https://localhost:14686/api/Employe
         : error.message;
       setErrorMessage(errorMsg);
       setTimeout(() => setErrorMessage(''), 5000);
-      throw error; // Rethrow to let EmployeeForm.js handle field-specific errors
+      throw error;
     } finally {
       setIsSubmitting(false);
     }

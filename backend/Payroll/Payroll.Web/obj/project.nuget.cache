@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zyqvAMTQG8Q=",
+  "dgSpecHash": "hfg38KYx+a8=",
   "success": true,
-  "projectFilePath": "D:\\PayrollMVC\\Payroll\\Payroll.Web\\Payroll.Web.csproj",
+  "projectFilePath": "C:\\Users\\Bezawit\\payroll 2\\payroll\\backend\\Payroll\\Payroll.Web\\Payroll.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bezawit\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Bezawit\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

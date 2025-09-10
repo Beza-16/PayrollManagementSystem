@@ -2,10 +2,19 @@ import React, { useState, useEffect, useCallback } from 'react';
 import CreateUserAccountForm from '../components/CreateUserAccountForm';
 import { FaEye, FaEyeSlash, FaEdit, FaTrash } from 'react-icons/fa';
 import { useUserSlice } from '../slices/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchRole } from '../slices/roleSlice';
+import axios from 'axios';
 import '../styles/CreateUserAccount.css';
 
 const CreateUserAccount = () => {
-  const { successMessage, errorMessage, isSubmitting, users, fetchUsers, roles, employees } = useUserSlice(); // Ensure roles and employees are available
+  const dispatch = useDispatch();
+  const { successMessage, errorMessage, isSubmitting, users, fetchUsers, employees } = useUserSlice();
+  const { roles, loading: roleLoading, error: roleError } = useSelector((state) => state.role || {
+    roles: [],
+    loading: false,
+    error: null,
+  });
   const [showUserModal, setShowUserModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,7 +25,8 @@ const CreateUserAccount = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]);
+    dispatch(fetchRole());
+  }, [fetchUsers, dispatch]);
 
   const togglePasswordVisibility = (username) => {
     setPasswordVisibility((prev) => ({
@@ -42,49 +52,54 @@ const CreateUserAccount = () => {
   };
 
   const handleDeleteUser = async (userId) => {
-    console.log(`Delete user with ID: ${userId}`);
-    fetchUsers();
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${process.env.REACT_APP_API_URL || 'https://localhost:14686'}/api/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+    }
   };
 
   const filterUsers = useCallback(
     (term, role) => {
-      const activeUsers = users.filter((user) => !user.DeletedAt && user.DeletedAt !== '0001-01-01T00:00:00Z');
-      const uniqueUsers = activeUsers.filter((user, index, self) =>
-        index === self.findIndex((u) => u.Username === user.Username && u.Email === user.Email && u.RoleName === user.RoleName)
-      );
-      return uniqueUsers.filter((user) => {
-        const matchesSearch = [
-          user.Username,
-          user.Email,
-          user.Employee,
-          user.RoleName,
-        ].some((field) => (field?.toLowerCase() || '').includes(term.toLowerCase()));
-        const matchesRole = role === 'All' || user.RoleName === role;
-        return matchesSearch && matchesRole;
-      });
+      return users
+        .filter((user) => !user.DeletedAt || user.DeletedAt === '0001-01-01T00:00:00Z')
+        .filter((user, index, self) =>
+          index === self.findIndex((u) => u.Username === user.Username && u.Email === user.Email && u.RoleName === user.RoleName)
+        )
+        .filter((user) => {
+          const matchesSearch = [
+            user.Username,
+            user.Email,
+            user.Employee,
+            user.RoleName,
+          ].some((field) => (field?.toLowerCase() || '').includes(term.toLowerCase()));
+          const matchesRole = role === 'All' || user.RoleName === role;
+          return matchesSearch && matchesRole;
+        });
     },
     [users]
   );
 
-  const debouncedFilter = useCallback(
-    (term, role) => {
-      const timeoutId = setTimeout(() => {
-        setFilteredUsers(filterUsers(term, role));
-        setCurrentPage(1);
-      }, 300);
-      return () => clearTimeout(timeoutId);
-    },
-    [filterUsers]
-  );
-
   const [filteredUsers, setFilteredUsers] = useState([]);
   useEffect(() => {
-    debouncedFilter(searchTerm, roleFilter);
-  }, [searchTerm, roleFilter, debouncedFilter]);
+    const timeoutId = setTimeout(() => {
+      setFilteredUsers(filterUsers(searchTerm, roleFilter));
+      setCurrentPage(1);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, roleFilter, filterUsers]);
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser).slice(0, 5);
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
   const handlePrevPage = () => {
@@ -100,10 +115,9 @@ const CreateUserAccount = () => {
     return new Date(date).toLocaleDateString();
   };
 
-  // Map RoleId and EmployeeId to names
   const getRoleName = (roleId) => {
-    const role = roles.find((r) => r.id === roleId);
-    return role ? role.name : 'N/A';
+    const role = roles.find((r) => r.value === roleId);
+    return role ? role.label : 'N/A';
   };
 
   const getEmployeeName = (employeeId) => {
@@ -121,8 +135,9 @@ const CreateUserAccount = () => {
       </div>
 
       {errorMessage && <div className="error-message" role="alert">{errorMessage}</div>}
+      {roleError && <div className="error-message" role="alert">{roleError}</div>}
       {successMessage && <div className="success-message" role="alert">{successMessage}</div>}
-      {isSubmitting && <div className="loading-message" role="status">Submitting...</div>}
+      {(isSubmitting || roleLoading) && <div className="loading-message" role="status">Loading...</div>}
 
       {showUserModal && (
         <CreateUserAccountForm onClose={handleCloseUserModal} onUserCreated={handleUserCreated} userToEdit={editUser} />
@@ -145,8 +160,9 @@ const CreateUserAccount = () => {
             aria-label="Filter by role"
           >
             <option value="All">All Roles</option>
-            <option value="Admin">Admin</option>
-            <option value="Employee">Employee</option>
+            {roles.map((role) => (
+              <option key={role.value} value={role.label}>{role.label}</option>
+            ))}
           </select>
         </div>
         <div className="table-wrapper">
@@ -166,7 +182,7 @@ const CreateUserAccount = () => {
             <tbody>
               {currentUsers.length > 0 ? (
                 currentUsers.map((user) => (
-                  <tr key={user.Username || `temp-${Math.random()}`}>
+                  <tr key={user.UserID || `temp-${Math.random()}`}>
                     <td>{user.Username || 'N/A'}</td>
                     <td>{user.Email || 'N/A'}</td>
                     <td className="password-field">
@@ -179,8 +195,8 @@ const CreateUserAccount = () => {
                         {passwordVisibility[user.Username] ? <FaEyeSlash /> : <FaEye />}
                       </span>
                     </td>
-                    <td>{getRoleName(user.RoleId) || 'N/A'}</td> {/* Map RoleId to RoleName */}
-                    <td>{getEmployeeName(user.EmployeeId) || 'N/A'}</td> {/* Map EmployeeId to EmployeeName */}
+                    <td>{getRoleName(user.RoleId) || 'N/A'}</td>
+                    <td>{getEmployeeName(user.EmployeeId) || 'N/A'}</td>
                     <td>{formatDate(user.CreatedAt)}</td>
                     <td>{formatDate(user.UpdatedAt)}</td>
                     <td className="actions-cell">
